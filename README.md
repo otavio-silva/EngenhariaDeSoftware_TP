@@ -1,7 +1,9 @@
 # Engenharia De Software - Trabalho Prático
 Repositório para o trabalho prático da disciplina Engenharia De Software (DCC603).
 
-## Histórias de Usuário
+## Spring Planing
+
+### Histórias de Usuário
 
 - História 1 : "Eu como usuário desejo fazer um login com usuário e senha."
 - História 2 : "Eu como usuário desejo adicionar um contato."
@@ -11,7 +13,7 @@ Repositório para o trabalho prático da disciplina Engenharia De Software (DCC6
 - História 6 : "Eu como usuário desejo receber a confirmação de leitura. "
 - História 7 (bônus): "Eu como usuário desejo criar um grupo e enviar mensagens à vários usuários. "
 
-## Tasks 
+### Tasks 
 
 - (Inicial) Montar um sistema que envia/consome Rest Requests para o frontend. Sistema: (.NET Core) 
     - Responsáveis: Otávio, Luiz, Elves
