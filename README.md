@@ -17,10 +17,13 @@ Repositório para o trabalho prático da disciplina Engenharia De Software (DCC6
 
 - (Inicial) Montar um sistema que envia/consome Rest Requests para o frontend. Sistema: (.NET Core) 
     - Responsáveis: Otávio, Luiz, Elves
+    - Meta: 21/08
 - (Inicial) Montar um sistema que envia/consome Rest Requests para o backend. Sistema: (Python) 
     - Responsáveis: Evandro, Gabriel
+    - Meta: 21/08
 - (Inicial) Montar as telas iniciais do aplicativo
     - Responsáveis: Evandro, Gabriel
+    - Meta: 21/08
 
 - (História 1) Montar uma tela de Login que produza o Request para login. O mesmo para o cadastro. 
     - Responsáveis: Evandro, Gabriel
