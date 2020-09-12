@@ -24,6 +24,7 @@ Repositório para o trabalho prático da disciplina Engenharia De Software (DCC6
 - (Inicial) Montar as telas iniciais do aplicativo
     - Responsáveis: Evandro, Gabriel
     - Meta: 21/08
+    - Concluído : 27/08 (Evandro)
 
 - (História 1) Montar uma tela de Login que produza o Request para login. O mesmo para o cadastro. 
     - Responsáveis: Evandro, Gabriel
@@ -33,12 +34,15 @@ Repositório para o trabalho prático da disciplina Engenharia De Software (DCC6
     - Responsáveis: Evandro, Gabriel
 - (História 3) Montar uma tela para escrever uma mensagem e um botão para enviá-la.
     - Responsáveis: Evandro, Gabriel
+    - Concluído : 01/08 (Evandro)
 - (História 3) Montar uma tela para ler as mensagens anteriores logo acima do painel de envio.
     - Responsáveis: Evandro, Gabriel
+    - Concluído : 11/09 (Evandro)
 - (História 3 e 6) Montar a API Rest para guardar e enviar as mensagens assim que o destinatário responder à um ping e confirmar o recebimento. 
     - Responsáveis: Otávio, Luiz, Elves
 - (História 4) Garantir que as mensagens sejam salvas localmente (cache das N últimas)
     - Responsáveis: Evandro, Gabriel
+    - Em progresso : 11/09 (Evandro)
 - (História 4) Garantir que as mensagens sejam salvas no banco de dados
     - Responsáveis: Otávio, Luiz, Elves
 - (História 5) Adicionar botão de excluir usuário do sistema
@@ -49,5 +53,6 @@ Repositório para o trabalho prático da disciplina Engenharia De Software (DCC6
     - Responsáveis: Evandro, Gabriel
 - (História 7) Criar uma tela de mensagens que mostre o nome de quem enviou cada mensagem
     - Responsáveis: Evandro, Gabriel
+    - Concluído : 11/09 (Evandro)
 - (História 7) Reaproveitar as tabelas de conversa e adaptá-las para um grupo. 
     - Responsáveis: Otávio, Luiz, Elves
