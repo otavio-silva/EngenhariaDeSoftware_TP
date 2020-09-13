@@ -1,4 +1,4 @@
 from django.contrib import admin
-from Message.models import Message
+from message.models import Message
 
 admin.site.register(Message)
