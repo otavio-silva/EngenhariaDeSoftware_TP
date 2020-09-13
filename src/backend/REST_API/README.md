@@ -18,16 +18,16 @@ python manage.py makemigrations message
 python manage.py migrate
 ```
 
-Inicie o servidor:
-
-```bash
-python manage.py runserver
-```
-
 Crie um superusuário:
 
 ```bash
 python manage.py createsuperuser
+```
+
+Inicie o servidor:
+
+```bash
+python manage.py runserver
 ```
 
 Acesse a página de administração e crie alguns objetos, em http://localhost:8000/admin
