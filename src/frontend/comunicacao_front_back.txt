@@ -1,0 +1,24 @@
+Tentarei listar aqui as comunicações que devem ser feitas entre o front end e o back end.
+
+
+-(História 1) Montar uma tela de Login que produza o Request para login. O mesmo para o cadastro.
+-> Request para login
+-> Request para cadastro
+
+-(História 3) Montar uma tela para escrever uma mensagem e um botão para enviá-la.
+->
+"
+São 3 funções rest: 
+- uma pra OUVIR, recebendo o JSON e respondendo uma confirmação assim que escrever no csv, 
+- outra pra ENVIAR, para enviar uma mensagem ouvindo a resposta de confirmação 
+- outra para ENVIAR o seu IP público para o back à cada 60 s e ouvir a resposta do back
+"
+
+-(História 5) Adicionar botão de excluir usuário do sistema
+-> Request ""DELETE" enviada por um administrador para remover um usuário
+
+-(História 6) Mudar o ícone da mensagem para o "double-tick" indicando confirmação de envio
+-> O front deve OUVIR um request indicando que sua msg enviada foi lida.
+
+**Existem histórias de usuário(3,6) que falam sobre responder a um ping. Entretanto, talvez isso não seja necessário, pois ao fazer o login o front do usuário deveria informar ao back que ele está online, nesse momento o back deveria enviar para ele as mensagens pendentes. Ou seja, o login funciona como o pong do ping. O usuário pode sair do aplicativo sem que recebe essas mensagens, isso deve ser tratado para todos os casos. A princípio se um usuário está online (enviou algum request nos últimos 60 segundos) ele deveria poder receber uma msg, mas caso ele tenha saído, acredito que deva-se esperar até um sinal de login para tentar enviar as mensagens pendentes a ele. Se o envio foi bem sucedido, o usuário que enviou essa msg deve receber uma confirmação de envio para o double tick. Isso substituiria o ping.
+
