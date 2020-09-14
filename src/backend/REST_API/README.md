@@ -13,7 +13,6 @@ pip install -r requirements.txt
 Faça as iniciações necessárias do banco de dados:
 
 ```bash
-python manage.py makemigrations chat 
 python manage.py makemigrations message
 python manage.py makemigrations user
 python manage.py migrate
@@ -37,7 +36,7 @@ O mecanismo de autenticação é via `token` único de cada usuário, assim, tod
 
 É necessário que o usuário informe sua senha e username, se a autenticação ocorrer sem problemas, um `token` de acesso será retornado.
 
-- [POST] http://localhost:8000/api/auth/ com o seguinte corpo json:
+- **[POST]** http://localhost:8000/api/auth/ com o seguinte corpo json:
     ```json
         {
             "username": "your_username",
@@ -79,7 +78,7 @@ access_token = req.json()['token']
 
 ### Usuários
 
-- Criação: [POST] http://localhost:8000/api/users/register  com o seguinte corpo json obrigatório:
+- Criação: **[POST]** http://localhost:8000/api/users/register  com o seguinte corpo json obrigatório:
     ```json
     {
         "username": "your_username",
@@ -107,7 +106,7 @@ access_token = req.json()['token']
     print(req.json())
     ``` 
 - Recuperar informação de um usuário (**requer token de acesso**):
-    - [GET] http://localhost:8000/api/users/{user_id}
+    - **[GET]** http://localhost:8000/api/users/{user_id}
     - Saída esperada:
         - Json com a informação do usuário ou de erro.
     - Exemplo:
@@ -129,3 +128,36 @@ access_token = req.json()['token']
         print(user_info)
         ```
 
+### Mensagens
+
+> **Em todas requisições abaixo, é necessário enviar o token de acesso no cabeçalho. Isto é, o usuário precisa estar autenticado.** 
+
+- Enviar mensagem: **[POST]** http://localhost:8000/api/messages com o json:
+    ```json
+    {
+	    "username": "receiver_username",
+	    "message": "message_content"
+    }
+    ```
+    - Resposta esperada:
+        - Se sucesso, o id da mensagem criada `created_id`. Útil para atualizar ou recuperar estado da mensagem enviada.  
+        - Se falha, json informando o erro.
+- Recuperar mensagem: **[GET]** http://localhost:8000/api/messages/{message_id}
+    - Resposta esperada:
+        - Se sucesso, json com o estado atual da mensagem.
+        - Se falha, json informando o erro.
+- Atualizar estado da mensagem para recebida ou lida: **[PUT]** http://localhost:8000/api/messages/{message_id} com json informando se a mensagem foi recebida ou lida. Isto é:
+    - Se mensagem foi recebida:
+        ```json
+        {
+            "received": true
+        }
+        ```
+    - Se a mensagem foi lida:
+        ```json
+        {
+            "read": true
+        }
+        ```
+    - Resultado esperado:
+        - Json com o estado atual da mensagem ou informações de erros.

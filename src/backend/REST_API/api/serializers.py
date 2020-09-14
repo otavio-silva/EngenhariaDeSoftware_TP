@@ -18,10 +18,10 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class MessageSerializer(serializers.ModelSerializer):
-    chat = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
     sender = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    receiver = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
 
     class Meta:
         model = Message
-        fields = ['id', 'chat', 'sender', 'content',
-                  'sent_at', 'received_at', 'read_at']
+        fields = ['id', 'sender', 'receiver' , 'content',
+                  'created_at', 'received_at', 'read_at']
