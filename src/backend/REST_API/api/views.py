@@ -1,12 +1,22 @@
 from django.http import HttpResponse, JsonResponse
+
 from rest_framework.parsers import JSONParser
+from rest_framework import permissions
+from rest_framework import generics
 
 from chat.models import Chat
 from message.models import Message
 
-from message.serializers import MessageSerializer
+from api.serializers import MessageSerializer, UserSerializer
+from user.models import User
 
-def message_list(request):
-    messages = Message.objects.all()
-    serializer = MessageSerializer(messages, many=True)
-    return JsonResponse(serializer.data, safe=False)
+class UserCreate(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (permissions.AllowAny,)
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    permission_classes = (permissions.IsAuthenticated, )

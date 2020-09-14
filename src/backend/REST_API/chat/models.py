@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from user.models import User
 
 class Chat(models.Model):
     name = models.CharField('Chat Name', max_length=64, null=True, blank=True)
