@@ -20,5 +20,9 @@ São 3 funções rest:
 -(História 6) Mudar o ícone da mensagem para o "double-tick" indicando confirmação de envio
 -> O front deve OUVIR um request indicando que sua msg enviada foi lida.
 
-**Existem histórias de usuário(3,6) que falam sobre responder a um ping. Entretanto, talvez isso não seja necessário, pois ao fazer o login o front do usuário deveria informar ao back que ele está online, nesse momento o back deveria enviar para ele as mensagens pendentes. Ou seja, o login funciona como o pong do ping. O usuário pode sair do aplicativo sem que recebe essas mensagens, isso deve ser tratado para todos os casos. A princípio se um usuário está online (enviou algum request nos últimos 60 segundos) ele deveria poder receber uma msg, mas caso ele tenha saído, acredito que deva-se esperar até um sinal de login para tentar enviar as mensagens pendentes a ele. Se o envio foi bem sucedido, o usuário que enviou essa msg deve receber uma confirmação de envio para o double tick. Isso substituiria o ping.
-
+**Existem histórias de usuário(3,6) que falam sobre responder a um ping. 
+Entretanto, talvez isso não seja necessário, pois ao fazer o login o front do usuário deveria informar ao back que ele está online, nesse momento o back deveria enviar para ele as mensagens pendentes. 
+Ou seja, o login funciona como o pong do ping. O usuário pode sair do aplicativo sem que recebe essas mensagens, isso deve ser tratado para todos os casos. A princípio se um usuário está online 
+(enviou algum request nos últimos 60 segundos) ele deveria poder receber uma msg, mas caso ele tenha saído, acredito que deva-se esperar até um sinal de login para tentar enviar as mensagens pendentes a ele. 
+Se o envio foi bem sucedido, o usuário que enviou essa msg deve receber uma confirmação de envio para o double tick. Isso substituiria o ping.
+**O ping pode ser uma solução mais simples.
