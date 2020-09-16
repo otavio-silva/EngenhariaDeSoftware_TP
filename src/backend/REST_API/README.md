@@ -69,7 +69,7 @@ credentials = {
 	"password": "your_password"
 }
 
-req = requests.post('http://localhost:8000/api/auth/', data=credentials)
+req = requests.post('http://localhost:8000/api/auth', data=credentials)
 
 access_token = req.json()['token']
 ```
@@ -106,7 +106,7 @@ access_token = req.json()['token']
     print(req.json())
     ``` 
 - Recuperar informação de um usuário (**requer token de acesso**):
-    - **[GET]** http://localhost:8000/api/users/{user_id}
+    - **[GET]** http://localhost:8000/api/users/{username}
     - Saída esperada:
         - Json com a informação do usuário ou de erro.
     - Exemplo:
@@ -115,14 +115,14 @@ access_token = req.json()['token']
 
         #caso não tenha o token de acesso armazenado em algum lugar
         credentials = {'username': 'your_username', 'password': 'your_password'}
-        req = requests.post('http://localhost:8000/api/auth/', data=credentials)
+        req = requests.post('http://localhost:8000/api/auth', data=credentials)
         access_token = req.json()['token']
 
         #envie o token de acesso no cabeçalho da requisição
         headers = {'Authorization': f'Token {access_token}'}
 
         #recuperar info. do usuário de ID 1
-        req = requests.get('http://localhost:8000/api/users/1', headers=headers)
+        req = requests.get('http://localhost:8000/api/users/username', headers=headers)
         user_info = req.json()
         
         print(user_info)

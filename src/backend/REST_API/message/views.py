@@ -10,9 +10,10 @@ from rest_framework import permissions
 from rest_framework import generics
 from rest_framework import status
 
-from user.models import User
+from user.models import User 
+
 from message.models import Message
-from api.serializers import MessageSerializer
+from message.serializers import MessageSerializer
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
@@ -65,7 +66,9 @@ def create_message(request):
     try:    
         receiver = User.objects.get(username=receiver_username)
 
-    except:
+    except Exception as e:
+        print(e)
+
         content = {'error': f'"{receiver_username}" not found.'}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
 
