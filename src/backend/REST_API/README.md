@@ -36,7 +36,7 @@ O mecanismo de autenticação é via `token` único de cada usuário, assim, tod
 
 É necessário que o usuário informe sua senha e username, se a autenticação ocorrer sem problemas, um `token` de acesso será retornado.
 
-- **[POST]** http://localhost:8000/api/auth/ com o seguinte corpo json:
+- **[POST]** http://localhost:8000/api/auth com o seguinte corpo json:
     ```json
         {
             "username": "your_username",
