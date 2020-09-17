@@ -8,10 +8,10 @@
 - [x] Api de criação de mensagem (História 3, 4)
 - [x] Api de atualizar estado de mensagem de recebido/lido (História 6)
 - [x] Api de recuperar mensagem (História 6)
-- [] Rotear mensagens para seu usuário de destino (História 3)
-- [] Notificar usuários relacionados a uma mensagem de mudanças de estado na mesma para recebida/lida (História 6)
-- [] Mecanismo que envia mensagens para usuários de destino assim que ele fique online  (História 3, 4, 6)
-- [] Processar requisições períodicas do Front e atualizar estado de um usuário para online/offline, bem como seu IP para roteamento de mensagens (História 3)
+- [ ] Rotear mensagens para seu usuário de destino (História 3)
+- [ ] Notificar usuários relacionados a uma mensagem de mudanças de estado na mesma para recebida/lida (História 6)
+- [ ] Mecanismo que envia mensagens para usuários de destino assim que ele fique online  (História 3, 4, 6)
+- [ ] Processar requisições períodicas do Front e atualizar estado de um usuário para online/offline, bem como seu IP para roteamento de mensagens (História 3)
 
 ## Instalações
 
