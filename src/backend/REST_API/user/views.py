@@ -17,6 +17,9 @@ from user.serializers import UserSerializer
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def user_detail(request, username):
+    #Recupera um usuário por seu username. 
+    # - As requisições devem ser do tipo GET e serem feitas de usuários autenticados.
+
     try:
         user = User.objects.get(username=username)
     except:
@@ -29,8 +32,13 @@ def user_detail(request, username):
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def create_user(request):
+    # Cria um usuário por meio de requisições tipo POST
+
+    # requesta.data é um dicionário que armazena os dados de criação do usuário
     if type(request.data) == QueryDict:
+        # Corrige valores de campos do dicionário vindos como lista (ocorre na biblioteca requests do python)
         data = request.data.dict()
+
     else:
         data = request.data
 

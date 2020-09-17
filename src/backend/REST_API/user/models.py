@@ -3,7 +3,8 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
 class UserManager(BaseUserManager):
-
+    # Template padrão para que seja possível extender a classe User 
+ 
     def _create_user(self, username, email, password, **extra_fields):
         if not username:
             raise ValueError(_('The given username must be set'))
@@ -27,8 +28,10 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
 
         return self._create_user(username, email, password, **extra_fields)
-        
+
 class User(AbstractUser):
+    # Adiciona novos campos a classe User
+    
     # se false, o usuário está offline
     online = models.BooleanField('Online', default=False, help_text='Online/offline')
     ip_address = models.CharField(
