@@ -36,4 +36,4 @@ class Message :
 
     def from_csv_line(self,line):
         s=line.split(",")
-        return Message(s[1],self.origin.from_value(s[0]))
+        return Message(s[1],self.origin.from_value(int(s[0])))
