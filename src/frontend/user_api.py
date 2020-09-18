@@ -6,7 +6,6 @@ from contact_info import *
 from rest_requests import *
 
 #TODO recuperar contatos e conversas do usuário, permitindo múltiplos usuários
-#TODO persistir todas as mensagens salvas no contact list, alterando o save_message
 #TODO enviar mensagens
 #TODO login e criação de usuário
 #TODO Double tick
