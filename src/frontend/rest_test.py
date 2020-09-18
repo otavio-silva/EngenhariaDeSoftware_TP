@@ -50,7 +50,6 @@ def get_message_info_request(message_id, access_token):
     req = requests.get('http://localhost:8000/api/messages/' + str(message_id), headers=headers)
     return req
 
-
 '''
 Faz requisição que atualiza o estado de uma mensagem para lida ou recebida
 Requisição tipo PUT
