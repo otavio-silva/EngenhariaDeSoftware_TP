@@ -6,13 +6,7 @@ from contact_info import *
 from rest_requests import *
 
 app = flask.Flask(__name__)
-#app.config["DEBUG"] = True
-
-'''
-@app.route('/', methods=['GET'])
-def home():
-    return """<h1>Distant Reading Archive</h1><p>A prototype API for distant reading of science fiction novels.</p>"""
-'''
+#app.config["DEBUG"] = True #Quebra o uso de thread separada
 
 '''
 URL para recebimento de mensagens.
@@ -28,7 +22,7 @@ def receive_message_from_request():
         message_id = request.form['id']
         sender_username = request.form['sender']
         message_content = request.form['content']
-        created_at = request.form['created_at']
+        #created_at = request.form['created_at']
         #Escrever no arquivo e só depois enviar a resposta
         receive_message_from_server(message_id, sender_username, message_content)
         response = make_response(jsonify({"success": "Mensagem enviada com sucesso"}), 201)
@@ -49,13 +43,14 @@ def receive_message_from_server(message_id, sender_username, message_content):
     sender_contact = contact_info.get_contact_from_username(sender_username)
     #Cria novo contato, consultando seu nome no servidor
     #TODO consultar servidor para saber o nome o usuario
-    #TODO corrigir bug nesta parte
+    #TODO Atualizar a página caso seja o contato atual, fazendo com que não seja necessário msg_are global
     if sender_contact == None:
         contact_info.create_contact(sender_username, sender_username)
         sender_contact = contact_info.get_contact_from_username(sender_username)
 
     if not msg.text.isspace() and msg:
-        display_message(msg_area, msg)
+        if contact_info.current_contact.username == sender_username:
+            display_message(msg_area, msg)
         contact_info.save_message(msg, sender_contact)
         contact_info.persist()
 
@@ -107,7 +102,7 @@ def main():
     on_close_args = partial(on_close, window,contact_info)
     window.protocol("WM_DELETE_WINDOW", on_close_args)
 
-    #Isso gera erro na thread
+    #Isso gera erro no uso de thread separada para o Flask
     #while True: 
     #    window.after(2)
     #    window.update()
