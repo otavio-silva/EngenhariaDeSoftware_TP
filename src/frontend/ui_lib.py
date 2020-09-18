@@ -7,11 +7,22 @@ from functools import partial
 from rest_requests import *
 
 '''
+Funções para que o Flask possa modificar a UI
+Essas variáveis só são criadas pela setup_chat
+'''
+def get_contact_info():
+    return contact_info
+def get_msg_area():
+    return msg_area
+
+'''
 Função que cria a tela principal.
-Também cria as variáveis globais msg_area e contact_info
+Também preenche as variáveis globais msg_area e contact_info
 Recebe o username
 '''
 def setup_chat(window, username, access_token):
+    global msg_area
+    global contact_info
     # Dummy contact info => Variável usada por outras funções
     contact_info = ContactInfo(username, access_token)
     window.deiconify() #Mostra a window que estava escondida
@@ -37,7 +48,7 @@ def setup_chat(window, username, access_token):
     on_close_args = partial(on_close, window,contact_info)
     window.protocol("WM_DELETE_WINDOW", on_close_args)
 
-    return contact_info, msg_area
+    #return contact_info, msg_area
 
 
 def create_contact_area(window):
@@ -166,11 +177,33 @@ def login_screen(window):
     entry_password = Entry(login, font = "Helvetica 14")
     entry_password.place(relwidth = 0.4, relheight = 0.12, relx = 0.35, rely = 0.4)
 
-    login_action = partial(authenticate_user, entry_username , entry_password)
-    go = Button(login, text = "CONTINUE", font = "Helvetica 14 bold", command = login_action)
-    go.place(relx = 0.4, rely = 0.55)
+    label_error = Label(login, text = "Um erro ocorreu ! Tente novamente.", font = "Helvetica 12")
 
-def authenticate_user(username_form, password_form):
-    print(username_form.get(), password_form.get())
-    return
+    login_action = partial(authenticate_user, entry_username , entry_password, label_error, window, login)
+    go = Button(login, text = "LOGAR", font = "Helvetica 14 bold", command = login_action)
+    go.place(relx = 0.4, rely = 0.55)
+    
+'''
+Função chamada ao clicar no botão de Logar
+Caso a autenticação dê errado, não vai para frente
+Caso dê certo, chama a função de trocar de janela
+'''
+def authenticate_user(username_form, password_form, label_error, window, login):
+    username = username_form.get()
+    password = password_form.get()
+    try:
+        req = authenticate_user_request(username, password)
+        access_token = req.json()['token']
+    except Exception as e:
+        label_error.place(relx = 0.4, rely = 0.6)
+        print(e)
+        return
+    login_to_chat(window, login, username, access_token)
     #return access_token
+
+'''
+Função que troca de janelas do login para o chat
+'''
+def login_to_chat(window, login, username, access_token):
+    login.destroy() 
+    setup_chat(window, username, access_token)

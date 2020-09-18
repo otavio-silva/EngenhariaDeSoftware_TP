@@ -5,9 +5,8 @@ from ui_lib import *
 from contact_info import *
 from rest_requests import *
 
-#TODO recuperar contatos e conversas do usuário, permitindo múltiplos usuários. 
-#TODO Recuperar as conversas até um certo número de msgs
-#TODO login e criação de usuário
+
+#TODO Criação de usuário
 #TODO enviar mensagens
 #TODO Double tick
 
@@ -39,12 +38,13 @@ def receive_message_from_request():
     
     return response
 
-
 '''
 Função chamada pela receive_message_from_request para efetivar o recebimento de uma mensagem
 Requer que window, contact_info e msg_area sejam globais
 '''
 def receive_message_from_server(message_id, sender_username, message_content):
+    contact_info = get_contact_info()#Pega variavel de ui_lib
+    msg_area = get_msg_area()#Pega variavel de ui_lib
     msg : Message = Message(message_content, MessageOrigin.RECEIVED)
     sender_contact = contact_info.get_contact_from_username(sender_username)
     #Cria novo contato, consultando seu nome no servidor
@@ -62,8 +62,7 @@ def receive_message_from_server(message_id, sender_username, message_content):
 
 '''
 Função main do programa
-Possui 3 variáveis globais:
-    window, contact_info e msg_area
+Possui uma variável global para ser acessada pelo Flask
 '''
 def main():
     #Começa o Servidor
@@ -72,17 +71,13 @@ def main():
     server_thread.start()
 
     #User Interface
-
     global window
-    global contact_info
-    global msg_area
 
     window = Tk()
     window.withdraw()
  
     login_screen(window)
-
-    contact_info, msg_area = setup_chat(window, 'user1', '')
+    #setup_chat(window, 'user1', '')
 
     window.mainloop()
 
