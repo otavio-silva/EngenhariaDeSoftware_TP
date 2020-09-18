@@ -6,9 +6,9 @@ class MessageOrigin(Enum):
 
     def from_value(self,value):
         if value == 1 : 
-            return SENT
+            return self.SENT
         else: 
-            return RECEIVED
+            return self.RECEIVED
 
 class Message :
 
@@ -36,4 +36,4 @@ class Message :
 
     def from_csv_line(self,line):
         s=line.split(",")
-        return Message(s[1],MessageOrigin.from_value(s[0]))
+        return Message(s[1],self.origin.from_value(s[0]))
