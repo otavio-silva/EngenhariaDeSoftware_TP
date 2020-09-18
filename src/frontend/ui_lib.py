@@ -79,7 +79,8 @@ def receive_message(msg_area,msg_form, contact_info : ContactInfo):
 
 def change_current_conversation(msg_area,contact,contact_info,current_contact_lbl):
     current_contact_lbl['text'] = contact.name
-    contact_info.current_contact = contact.username
+    #contact_info.current_contact = contact.username
+    contact_info.current_contact = contact
     msg_area.delete("1.0",END)
     for msg in contact.messages:
         display_message(msg_area,msg)
