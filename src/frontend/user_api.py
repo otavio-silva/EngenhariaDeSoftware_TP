@@ -5,6 +5,11 @@ from ui_lib import *
 from contact_info import *
 from rest_requests import *
 
+#TODO recuperar contatos e conversas do usuário, permitindo múltiplos usuários
+#TODO enviar mensagens
+#TODO login e criação de usuário
+#TODO Double tick
+
 app = flask.Flask(__name__)
 #app.config["DEBUG"] = True #Quebra o uso de thread separada
 
@@ -48,14 +53,17 @@ def receive_message_from_server(message_id, sender_username, message_content):
         sender_contact = contact_info.get_contact_from_username(sender_username)
         update_contact_area(window, msg_area, contact_info)
 
-
     if not msg.text.isspace() and msg:
         if contact_info.current_contact.username == sender_username:
             display_message(msg_area, msg)
         contact_info.save_message(msg, sender_contact)
         contact_info.persist()
 
-
+'''
+Função main do programa
+Possui 3 variáveis globais:
+    window, contact_info e msg_area
+'''
 
 def main():
     #Começa o Servidor
@@ -65,17 +73,24 @@ def main():
 
     #User Interface
 
+    global window
+    global contact_info
+    global msg_area
+
+    window = Tk()
+
+    contact_info, msg_area = setup_chat(window, 'user')
+    '''
     # Dummy contact info => Variável usada por outras funções
     global contact_info
     contact_info = ContactInfo()
 
-    global window
-    window = Tk()
     window.title("Omicron Messenger")
     window.geometry('600x400')
 
-    # Profile picture placeholder
+    #Tela de Login
 
+    # Profile picture placeholder
     lbl = Label(window, text="PP", font=("Arial Bold", 50))
     lbl.grid(column=0, row=0, sticky="ew")
 
@@ -95,11 +110,14 @@ def main():
     #current_contact_lbl = Label(window, text=contact_info.current_contact.name, font=("Arial Bold", 20))
     #current_contact_lbl.grid(column=1, row=0, sticky="s")
     #update_contact_area(contact_area, contact_info, window, msg_area, current_contact_lbl)
+    # Contact Area
     update_contact_area(window, msg_area, contact_info)
+    
     
     # make the top right close button minimize (iconify) the main window
     on_close_args = partial(on_close, window,contact_info)
     window.protocol("WM_DELETE_WINDOW", on_close_args)
+    '''
 
     #Isso gera erro no uso de thread separada para o Flask
     #while True: 
