@@ -36,17 +36,18 @@ def receive_message_from_request():
 
 '''
 Função chamada pela receive_message_from_request para efetivar o recebimento de uma mensagem
-Requer que contact_info e msg_area sejam globais
+Requer que window, contact_info e msg_area sejam globais
 '''
 def receive_message_from_server(message_id, sender_username, message_content):
     msg : Message = Message(message_content, MessageOrigin.RECEIVED)
     sender_contact = contact_info.get_contact_from_username(sender_username)
     #Cria novo contato, consultando seu nome no servidor
     #TODO consultar servidor para saber o nome o usuario
-    #TODO Atualizar a página caso seja o contato atual, fazendo com que não seja necessário msg_are global
     if sender_contact == None:
         contact_info.create_contact(sender_username, sender_username)
         sender_contact = contact_info.get_contact_from_username(sender_username)
+        update_contact_area(window, msg_area, contact_info)
+
 
     if not msg.text.isspace() and msg:
         if contact_info.current_contact.username == sender_username:
@@ -68,6 +69,7 @@ def main():
     global contact_info
     contact_info = ContactInfo()
 
+    global window
     window = Tk()
     window.title("Omicron Messenger")
     window.geometry('600x400')
@@ -89,14 +91,11 @@ def main():
     # Button to receive the message 
     #receive_text_action = create_receive_msg_button(window,msg_area,msg_receive_form,contact_info)
     # Contact Area
-    contact_area = create_contact_area(window)
-    current_contact_lbl = Label(window, text=contact_info.current_contact.name, font=("Arial Bold", 20))
-    current_contact_lbl.grid(column=1, row=0, sticky="s")
-    for c in contact_info.contacts:
-        contact = contact_info.contacts[c]
-        action_with_arg = partial(change_current_conversation, msg_area,contact,contact_info,current_contact_lbl)
-        button = Button(window, width=contact_area["width"]-3, text=contact.name,command= action_with_arg)
-        contact_area.window_create('end', window=button)
+    #contact_area = create_contact_area(window)
+    #current_contact_lbl = Label(window, text=contact_info.current_contact.name, font=("Arial Bold", 20))
+    #current_contact_lbl.grid(column=1, row=0, sticky="s")
+    #update_contact_area(contact_area, contact_info, window, msg_area, current_contact_lbl)
+    update_contact_area(window, msg_area, contact_info)
     
     # make the top right close button minimize (iconify) the main window
     on_close_args = partial(on_close, window,contact_info)
@@ -106,7 +105,7 @@ def main():
     #while True: 
     #    window.after(2)
     #    window.update()
-
+    
     window.mainloop()
 
 if __name__ == "__main__":

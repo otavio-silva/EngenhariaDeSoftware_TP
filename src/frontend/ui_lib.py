@@ -1,4 +1,5 @@
 #Apenas para testar a user_api.py
+#TODO atualizar parte dos contatos para contar com novos contatos
 
 from tkinter import *
 from tkinter import scrolledtext
@@ -84,6 +85,17 @@ def change_current_conversation(msg_area,contact,contact_info,current_contact_lb
     msg_area.delete("1.0",END)
     for msg in contact.messages:
         display_message(msg_area,msg)
+
+def update_contact_area(window, msg_area, contact_info):
+    contact_area = create_contact_area(window)
+    current_contact_lbl = Label(window, text=contact_info.current_contact.name, font=("Arial Bold", 20))
+    current_contact_lbl.grid(column=1, row=0, sticky="s")
+    contact_area.delete("1.0",END)
+    for c in contact_info.contacts:
+        contact = contact_info.contacts[c]
+        action_with_arg = partial(change_current_conversation, msg_area,contact,contact_info,current_contact_lbl)
+        button = Button(window, width=contact_area["width"]-3, text=contact.name,command= action_with_arg)
+        contact_area.window_create('end', window=button)
 
 def on_close(window,contact_info):
         print("Fechando...")
