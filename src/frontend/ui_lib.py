@@ -28,6 +28,10 @@ def setup_chat(window, username, access_token):
     send_text_action = create_send_msg_button(window,msg_area,msg_send_form,contact_info)
     # Contact Area
     update_contact_area(window, msg_area, contact_info)
+    #Display current messages
+    msg_area.delete("1.0",END)
+    for msg in contact_info.current_contact.messages:
+        display_message(msg_area,msg)
 
     # make the top right close button minimize (iconify) the main window
     on_close_args = partial(on_close, window,contact_info)
