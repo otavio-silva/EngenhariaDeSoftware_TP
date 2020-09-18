@@ -9,6 +9,7 @@ from rest_requests import *
 #TODO Criação de usuário
 #TODO enviar mensagens
 #TODO Double tick
+#TODO Criar novo contato
 
 app = flask.Flask(__name__)
 #app.config["DEBUG"] = True #Quebra o uso de thread separada
@@ -45,6 +46,7 @@ Requer que window, contact_info e msg_area sejam globais
 def receive_message_from_server(message_id, sender_username, message_content):
     contact_info = get_contact_info()#Pega variavel de ui_lib
     msg_area = get_msg_area()#Pega variavel de ui_lib
+
     msg : Message = Message(message_content, MessageOrigin.RECEIVED)
     sender_contact = contact_info.get_contact_from_username(sender_username)
     #Cria novo contato, consultando seu nome no servidor
