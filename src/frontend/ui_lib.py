@@ -14,7 +14,7 @@ Recebe o username
 def setup_chat(window, username, access_token):
     # Dummy contact info => Variável usada por outras funções
     contact_info = ContactInfo(username, access_token)
-
+    window.deiconify() #Mostra a window que estava escondida
     window.title("Omicron Messenger")
     window.geometry('600x400')
     # Profile picture placeholder
@@ -141,3 +141,36 @@ def on_close(window,contact_info):
 
 
 #Funções para lidar com login de usuário
+
+'''
+Função que cria a tela de login
+Pega username e token de autenticação
+Pode redirecionar para tela de criação de usuário
+'''
+def login_screen(window):
+    login = Toplevel()
+    login.title("Login") 
+    login.geometry('600x400')
+
+    pls = Label(login, text = "Faça seu login", justify = CENTER, font = "Helvetica 14 bold")
+    pls.place(relheight = 0.15, relx = 0.2, rely = 0.07)
+
+    label_username = Label(login, text = "Username: ", font = "Helvetica 12")   
+    label_username.place(relheight = 0.2, relx = 0.1, rely = 0.2)  
+    entry_username = Entry(login, font = "Helvetica 14") 
+    entry_username.place(relwidth = 0.4, relheight = 0.12, relx = 0.35, rely = 0.2)
+    entry_username.focus()
+
+    label_password = Label(login, text = "Senha: ", font = "Helvetica 12")   
+    label_password.place(relheight = 0.2, relx = 0.1, rely = 0.4)
+    entry_password = Entry(login, font = "Helvetica 14")
+    entry_password.place(relwidth = 0.4, relheight = 0.12, relx = 0.35, rely = 0.4)
+
+    login_action = partial(authenticate_user, entry_username , entry_password)
+    go = Button(login, text = "CONTINUE", font = "Helvetica 14 bold", command = login_action)
+    go.place(relx = 0.4, rely = 0.55)
+
+def authenticate_user(username_form, password_form):
+    print(username_form.get(), password_form.get())
+    return
+    #return access_token

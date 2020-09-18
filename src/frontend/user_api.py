@@ -78,8 +78,11 @@ def main():
     global msg_area
 
     window = Tk()
+    window.withdraw()
+ 
+    login_screen(window)
 
-    contact_info, msg_area = setup_chat(window, 'user', '')
+    contact_info, msg_area = setup_chat(window, 'user1', '')
 
     window.mainloop()
 
