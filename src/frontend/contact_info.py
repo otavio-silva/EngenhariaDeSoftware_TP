@@ -45,3 +45,22 @@ class ContactInfo :
                     file.write(csv_msg + "\n")
                     file.close()
                     msg.set_as_persisted()
+    
+    '''
+    Método que cria um novo contato, caso não exista
+    '''
+    def create_contact(self, name, username):
+        if username in self.contacts:
+            return
+        new_contact = Contact(username, name)
+        self.contacts[new_contact.username] = new_contact
+
+    '''
+    Método que retorna objeto Contact correspondente a um username.
+    '''
+    def get_contact_from_username(self, username):
+        if username in self.contacts:
+            return self.contacts[username]
+        else:
+            return None
+
