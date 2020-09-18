@@ -63,7 +63,7 @@ def update_message_state_request(received, read, message_id, access_token):
 
 
 
-
+'''
 username = "usr"
 password = "psw"
 req = create_user_request(username, password)
@@ -83,3 +83,4 @@ print(req.json())
 #response = requests.get("http://127.0.0.1:5000/api/messages")
 #print(response.content)
 #print(json.loads(response.content))
+'''

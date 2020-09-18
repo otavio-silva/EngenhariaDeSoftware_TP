@@ -2,6 +2,8 @@ import flask
 from flask import request, jsonify, make_response
 import threading
 from ui_lib import *
+from contact_info import *
+from rest_requests import *
 
 app = flask.Flask(__name__)
 #app.config["DEBUG"] = True
@@ -28,12 +30,34 @@ def receive_message_from_request():
         message_content = request.form['content']
         created_at = request.form['created_at']
         #Escrever no arquivo e só depois enviar a resposta
-        response = make_response(jsonify({"error": "Algo deu errado no processamento da mensagem"}), 500)
-    except:
+        receive_message_from_server(message_id, sender_username, message_content)
+        response = make_response(jsonify({"success": "Mensagem enviada com sucesso"}), 201)
+
+    except Exception as e:
+        print(e)
         response = make_response(jsonify({"error": "Algo deu errado no processamento da mensagem"}), 500)
     
     return response
 
+
+'''
+Função chamada pela receive_message_from_request para efetivar o recebimento de uma mensagem
+Requer que contact_info e msg_area sejam globais
+'''
+def receive_message_from_server(message_id, sender_username, message_content):
+    msg : Message = Message(message_content, MessageOrigin.RECEIVED)
+    sender_contact = contact_info.get_contact_from_username(sender_username)
+    #Cria novo contato, consultando seu nome no servidor
+    #TODO consultar servidor para saber o nome o usuario
+    #TODO corrigir bug nesta parte
+    if sender_contact == None:
+        contact_info.create_contact(sender_username, sender_username)
+        sender_contact = contact_info.get_contact_from_username(sender_username)
+
+    if not msg.text.isspace() and msg:
+        display_message(msg_area, msg)
+        contact_info.save_message(msg, sender_contact)
+        contact_info.persist()
 
 
 
@@ -45,8 +69,8 @@ def main():
 
     #User Interface
 
-    # Dummy contact info
-
+    # Dummy contact info => Variável usada por outras funções
+    global contact_info
     contact_info = ContactInfo()
 
     window = Tk()
@@ -59,15 +83,16 @@ def main():
     lbl.grid(column=0, row=0, sticky="ew")
 
     # Message area where the messages appear
+    global msg_area
     msg_area = create_msg_area(window) 
     # Form to write messages
     msg_send_form = create_msg_send_form(window,msg_area,contact_info)
     # Button to send the message 
     send_text_action = create_send_msg_button(window,msg_area,msg_send_form,contact_info)
     # Form to receive messages (will remove it once the rest method calls the receive_message function)
-    msg_receive_form = create_msg_receive_form(window,msg_area,contact_info)
+    #msg_receive_form = create_msg_receive_form(window,msg_area,contact_info)
     # Button to receive the message 
-    receive_text_action = create_receive_msg_button(window,msg_area,msg_receive_form,contact_info)
+    #receive_text_action = create_receive_msg_button(window,msg_area,msg_receive_form,contact_info)
     # Contact Area
     contact_area = create_contact_area(window)
     current_contact_lbl = Label(window, text=contact_info.current_contact.name, font=("Arial Bold", 20))
@@ -82,11 +107,12 @@ def main():
     on_close_args = partial(on_close, window,contact_info)
     window.protocol("WM_DELETE_WINDOW", on_close_args)
 
-    while True: 
-        window.after(2)
-        window.update()
+    #Isso gera erro na thread
+    #while True: 
+    #    window.after(2)
+    #    window.update()
 
-    # window.mainloop()
+    window.mainloop()
 
 if __name__ == "__main__":
     main()
