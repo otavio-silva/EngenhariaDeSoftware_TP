@@ -11,7 +11,7 @@ from rest_framework import permissions
 from rest_framework import generics
 from rest_framework import status
 
-from user.models import User 
+from user.models import User
 
 from message.models import Message
 from message.serializers import MessageSerializer
@@ -19,7 +19,7 @@ from message.serializers import MessageSerializer
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def message_detail(request, pk):
-    # Função responsável por recuperar ou atualizar mensagem de id = pk 
+    # Função responsável por recuperar ou atualizar mensagem de id = pk
 
     try:
         message = Message.objects.get(pk=pk)
@@ -38,15 +38,15 @@ def message_detail(request, pk):
         if type(request.data) == QueryDict:
             # Corrige valores de campos do dicionário vindos como lista (ocorre na biblioteca requests do python)
             data = request.data.dict()
-                
+
         else:
             data = request.data
-        
+
         # verifica se a requisição recebida informa que a mensagem foi lida, atualizando o estado da mensagem
         if data.get('read'):
             if not message.received_at:
                 message.received_at = datetime.now()
-            
+
             message.read_at = datetime.now()
             message.save()
 
@@ -76,26 +76,25 @@ def message_detail(request, pk):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def create_message(request):
-    # Cria uma nova instância dde mensagem no banco de dados. Apenas usuários autenticados e requisições POST 
-
+    # Cria uma nova instância dde mensagem no banco de dados. Apenas usuários autenticados e requisições POST
     if type(request.data) == QueryDict:
         # Corrige valores de campos do dicionário vindos como lista (ocorre na biblioteca requests do python)
         data = request.data.dict()
 
     else:
-        data = request.data    
+        data = request.data
 
     # sequencia de verificações para validar mensagens
     # TODO: Validar mensagem em função específica
 
-    # verifica se o destino da mensagem é válido 
+    # verifica se o destino da mensagem é válido
     receiver_username = data.get('username')
     if not receiver_username:
         content = {'error': 'username is required.'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
-    
-    # verifica se o usuário destino da mensagem existe 
-    try:    
+
+    # verifica se o usuário destino da mensagem existe
+    try:
         receiver = User.objects.get(username=receiver_username)
 
     except Exception as e:
@@ -116,7 +115,7 @@ def create_message(request):
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     # Fim de sequencia de verificação de validade de mensagens
-
+    
     else:
         try:
             # Tenta criar uma nova instância de mensagem
@@ -125,11 +124,11 @@ def create_message(request):
                         receiver=receiver,
                         content=message_content
                     )
-            
+
             message.save()
 
             content = {'created_id': message.id}
             return Response(content, status=status.HTTP_201_CREATED)
-        
+
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
