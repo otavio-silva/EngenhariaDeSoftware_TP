@@ -6,6 +6,7 @@ from contact_info import *
 from rest_requests import *
 
 #TODO recuperar contatos e conversas do usuário, permitindo múltiplos usuários
+#TODO persistir todas as mensagens salvas no contact list, alterando o save_message
 #TODO enviar mensagens
 #TODO login e criação de usuário
 #TODO Double tick
@@ -64,7 +65,6 @@ Função main do programa
 Possui 3 variáveis globais:
     window, contact_info e msg_area
 '''
-
 def main():
     #Começa o Servidor
     #print(" Go to http://127.0.0.1:5000/api/messages to see the request result")
@@ -79,7 +79,10 @@ def main():
 
     window = Tk()
 
-    contact_info, msg_area = setup_chat(window, 'user')
+    contact_info, msg_area = setup_chat(window, 'user', '')
+
+    window.mainloop()
+
     '''
     # Dummy contact info => Variável usada por outras funções
     global contact_info
@@ -117,7 +120,7 @@ def main():
     # make the top right close button minimize (iconify) the main window
     on_close_args = partial(on_close, window,contact_info)
     window.protocol("WM_DELETE_WINDOW", on_close_args)
-    '''
+    
 
     #Isso gera erro no uso de thread separada para o Flask
     #while True: 
@@ -125,6 +128,7 @@ def main():
     #    window.update()
     
     window.mainloop()
+    '''
 
 if __name__ == "__main__":
     main()

@@ -11,9 +11,9 @@ Função que cria a tela principal.
 Também cria as variáveis globais msg_area e contact_info
 Recebe o username
 '''
-def setup_chat(window, username):
+def setup_chat(window, username, access_token):
     # Dummy contact info => Variável usada por outras funções
-    contact_info = ContactInfo()
+    contact_info = ContactInfo(username, access_token)
 
     window.title("Omicron Messenger")
     window.geometry('600x400')
