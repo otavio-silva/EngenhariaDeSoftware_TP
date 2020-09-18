@@ -1,12 +1,40 @@
-#Apenas para testar a user_api.py
-#TODO atualizar parte dos contatos para contar com novos contatos
-
 from tkinter import *
 from tkinter import scrolledtext
 from message import *
 from contact import *
 from contact_info import *
 from functools import partial
+from rest_requests import *
+
+'''
+Função que cria a tela principal.
+Também cria as variáveis globais msg_area e contact_info
+Recebe o username
+'''
+def setup_chat(window, username):
+    # Dummy contact info => Variável usada por outras funções
+    contact_info = ContactInfo()
+
+    window.title("Omicron Messenger")
+    window.geometry('600x400')
+    # Profile picture placeholder
+    lbl = Label(window, text="PP", font=("Arial Bold", 50))
+    lbl.grid(column=0, row=0, sticky="ew")
+    # Message area where the messages appear
+    msg_area = create_msg_area(window) 
+    # Form to write messages
+    msg_send_form = create_msg_send_form(window,msg_area,contact_info)
+    # Button to send the message 
+    send_text_action = create_send_msg_button(window,msg_area,msg_send_form,contact_info)
+    # Contact Area
+    update_contact_area(window, msg_area, contact_info)
+
+    # make the top right close button minimize (iconify) the main window
+    on_close_args = partial(on_close, window,contact_info)
+    window.protocol("WM_DELETE_WINDOW", on_close_args)
+
+    return contact_info, msg_area
+
 
 def create_contact_area(window):
     contact_area = scrolledtext.ScrolledText(window,width=15,height=10)
@@ -63,6 +91,8 @@ def display_message(msg_area,msg : str):
         msg_area.yview_moveto( 1 )
 
 def send_message(msg_area,msg_form, contact_info : ContactInfo):
+    #Tenta enviar para o backend, caso dê errado retorna
+
     msg : Message = Message(msg_form.get(),MessageOrigin.SENT)
     if not msg.text.isspace() and msg:  
         display_message(msg_area,msg)
@@ -101,3 +131,9 @@ def on_close(window,contact_info):
         print("Fechando...")
         window.destroy()
         contact_info.persist()
+
+
+#Funções para lidar com criação de usuário
+
+
+#Funções para lidar com login de usuário
