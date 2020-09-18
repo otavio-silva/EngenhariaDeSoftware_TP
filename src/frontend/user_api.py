@@ -5,9 +5,10 @@ from ui_lib import *
 from contact_info import *
 from rest_requests import *
 
-#TODO recuperar contatos e conversas do usuário, permitindo múltiplos usuários
-#TODO enviar mensagens
+#TODO recuperar contatos e conversas do usuário, permitindo múltiplos usuários. 
+#TODO Recuperar as conversas até um certo número de msgs
 #TODO login e criação de usuário
+#TODO enviar mensagens
 #TODO Double tick
 
 app = flask.Flask(__name__)
@@ -77,8 +78,11 @@ def main():
     global msg_area
 
     window = Tk()
+    window.withdraw()
+ 
+    login_screen(window)
 
-    contact_info, msg_area = setup_chat(window, 'user', '')
+    contact_info, msg_area = setup_chat(window, 'user1', '')
 
     window.mainloop()
 

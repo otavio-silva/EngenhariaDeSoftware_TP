@@ -3,7 +3,6 @@ from contact import *
 from message import *
 from rest_requests import get_user_info_request
 import os
-from os.path import isfile, join
 
 class ContactInfo :
 
@@ -50,6 +49,7 @@ class ContactInfo :
                 Contact("buhbuh54","Bruna")
         ]
         for contact in contact_list:
+            self.fill_persisted_messages(contact)
             self.contacts[contact.username] = contact
             self.current_contact = contact
 
@@ -81,12 +81,27 @@ class ContactInfo :
         if not os.path.isdir(user_folder_path):
             os.mkdir(user_folder_path)
         contact_list = []
-        onlyfiles = [f for f in os.listdir(user_folder_path) if isfile(join(user_folder_path, f))]
+        onlyfiles = [f for f in os.listdir(user_folder_path) if os.path.isfile(os.path.join(user_folder_path, f))]
         for filename in onlyfiles:
             contact_username = filename[:-4]
             contact_name = self.get_contact_name(contact_username)
             contact_list.append(Contact(contact_username, contact_name))
         return contact_list
+    
+    '''
+    Preenche a lista de mensagens do contato contact
+    '''
+    def fill_persisted_messages(self, contact):
+        file_name_path = "resources/messages/" + str(self.username) + "/" + str(contact.username) + ".txt"
+        if not os.path.isfile(file_name_path):
+            return
+        contact_file = open(file_name_path, "r")
+        dummy_msg : Message = Message('',MessageOrigin.SENT) #Apenas para chamar uma funcao
+        for line in contact_file:
+            new_msg = dummy_msg.from_csv_line(line)
+            new_msg.set_as_persisted()
+            contact.messages.append(new_msg)
+
 
     '''
     Faz uma requisição para descobrir o nome atual de um usuário
