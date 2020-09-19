@@ -19,3 +19,6 @@ from message.serializers import MessageSerializer
 def check_message(user):
 
     # Implementacao de codigo para envio de mensagem para usuario
+
+    return 0
+    
