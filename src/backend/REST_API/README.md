@@ -182,5 +182,6 @@ A url a seguir serve para que um usuário envie requisições períodicas ao ser
 > Obs.: O usuário deve mandar requisições períodicas de 5 segundos. 
 
 - Endereço (requer envio de token de acesso): **[PUT]** http://localhost:8000/api/keep-active
-
+- Resposta esperada: Código HTTP 200, se tudo ocorreu corretamente ou 500, no contrário. 
 Desse modo, se após 5 segundos um usuário não enviar uma requisição para o endereço acima, ele será considerado inativo/offline. 
+

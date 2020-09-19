@@ -53,15 +53,19 @@ def user_keep_active(request):
 
     O usuário deve mandar requisições períodicas informando que está ativo.
     '''
-    user = request.user 
+    try:
+        user = request.user 
 
-    user.last_live_signal = datetime.now()
-    user.online = True 
-    user.ip_address = request.META['REMOTE_ADDR']
+        user.last_live_signal = datetime.now()
+        user.online = True 
+        user.ip_address = request.META['REMOTE_ADDR']
 
-    user.save()
+        user.save()
 
-    return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
+
+    except:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
