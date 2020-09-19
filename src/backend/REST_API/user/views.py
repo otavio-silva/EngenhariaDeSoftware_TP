@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.http import HttpResponse, JsonResponse
 from django.http.request import QueryDict
 
@@ -14,6 +16,18 @@ from rest_framework.authtoken.models import Token
 from user.models import User
 from user.serializers import UserSerializer
 
+def is_user_online(user, delta = 60):
+    '''Verifica se um usuário está online baseado em se ele enviou requisição informando que está ativo nos últimos delta segundos.
+    '''
+
+    last_live_signal = user.last_live_signal.timestamp()
+    now = datetime.now().timestamp()
+
+    if now - last_live_signal > delta:
+        return False 
+    
+    return True
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def user_detail(request, username):
@@ -26,8 +40,28 @@ def user_detail(request, username):
         content = {'error': f'"{username}" not found.'}
         return JsonResponse(content, status.HTTP_404_NOT_FOUND)
 
+    user.online = is_user_online(user)
+    user.save()
+
     serialized_user = UserSerializer(user).data
     return JsonResponse(serialized_user, status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def user_keep_active(request):
+    '''Atualiza o estado de um usuário.
+
+    O usuário deve mandar requisições períodicas informando que está ativo.
+    '''
+    user = request.user 
+
+    user.last_live_signal = datetime.now()
+    user.online = True 
+    user.ip_address = request.META['REMOTE_ADDR']
+
+    user.save()
+
+    return Response(status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])

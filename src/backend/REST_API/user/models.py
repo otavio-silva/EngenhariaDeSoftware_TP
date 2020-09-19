@@ -35,6 +35,8 @@ class User(AbstractUser):
     # se false, o usuário está offline
     online = models.BooleanField('Online', default=False, help_text='Online/offline')
     ip_address = models.CharField(
-        'IP Address', max_length=32, default='127.0.0.1:8000')
+        'IP Address', max_length=12, default='127.0.0.1')
+
+    last_live_signal = models.DateTimeField('Last live signal', auto_now_add=True) 
 
     objects = UserManager()
