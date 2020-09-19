@@ -1,6 +1,7 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-
 
 class UserManager(BaseUserManager):
     # Template padrão para que seja possível extender a classe User 
@@ -40,3 +41,25 @@ class User(AbstractUser):
     last_live_signal = models.DateTimeField('Last live signal', auto_now_add=True) 
 
     objects = UserManager()
+
+    def update_online_status(self, delta = 5):
+        '''Atualiza o estado de online/offline do usuário verificando se ele mandou sinal de que está ativo nos últimos `delta` segundos
+        '''
+        now = datetime.now().timestamp()
+        
+        if (now - self.last_live_signal.timestamp() > delta):
+            self.online = False
+        else:
+            self.online = True 
+
+        self.save()
+
+    def set_ip_address(self, new_ip):
+        '''Atualiza o endereço ip do usuário 
+        '''
+        self.ip_address = new_ip 
+
+    def set_last_live_signal(self, time_live_signal):
+        '''Atualiza o último horário que o usuário mandou sinal de que está ativo
+        '''
+        self.last_live_signal = time_live_signal

@@ -40,8 +40,7 @@ def user_detail(request, username):
         content = {'error': f'"{username}" not found.'}
         return JsonResponse(content, status.HTTP_404_NOT_FOUND)
 
-    user.online = is_user_online(user)
-    user.save()
+    user.update_online_status()
 
     serialized_user = UserSerializer(user).data
     return JsonResponse(serialized_user, status=status.HTTP_200_OK)
@@ -49,16 +48,19 @@ def user_detail(request, username):
 @api_view(['PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def user_keep_active(request):
-    '''Atualiza o estado de um usuário.
+    '''Mantém o estado do usuário como ativo.
 
-    O usuário deve mandar requisições períodicas informando que está ativo.
+    O usuário deve mandar requisições períodicas para este local indicando que está ativo.
     '''
+    
     try:
         user = request.user 
 
-        user.last_live_signal = datetime.now()
-        user.online = True 
-        user.ip_address = request.META['REMOTE_ADDR']
+        now = datetime.now()
+        ip_address = request.META['REMOTE_ADDR']
+
+        user.set_ip_address(ip_address)
+        user.set_last_live_signal(now)
 
         user.save()
 
