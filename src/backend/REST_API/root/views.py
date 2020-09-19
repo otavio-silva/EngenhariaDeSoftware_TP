@@ -1,3 +1,5 @@
+import requests
+
 from django.http.request import QueryDict
 
 from django.http import HttpResponse, JsonResponse
@@ -17,8 +19,8 @@ from message.models import Message
 from message.serializers import MessageSerializer
 
 def check_message(user):
+    user_receiver = user.id
 
-    # Implementacao de codigo para envio de mensagem para usuario
-
-    return 0
-    
+    user_messages = Message.objects.filter(receiver = user).all()
+    print(user_messages)
+    # user_messages = user_messages.filter(received_at == None).all()

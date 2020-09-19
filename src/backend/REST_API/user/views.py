@@ -16,11 +16,13 @@ from rest_framework.authtoken.models import Token
 from user.models import User
 from user.serializers import UserSerializer
 
+from root.view import check_message
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def user_detail(request, username):
     ''' Recupera um usuário no banco de dados pelo seu `username`.
-    
+
     É necessário que o usuário que fez a requisição esteja autenticado e utilize o método GET.
 
     Args:
@@ -28,7 +30,7 @@ def user_detail(request, username):
         username: `username` do usuário a ser recuperado no banco de dados.
 
     Returns:
-        Json com informações sobre usuário de `username` ou que ele não existe. 
+        Json com informações sobre usuário de `username` ou que ele não existe.
 
     '''
 
@@ -56,7 +58,7 @@ def user_keep_active(request):
 
     Args:
         request: Requisição HTTP do tipo PUT.
-    
+
     Returns:
         Código HTTP 200 indicando que a requisição do usuário ocorreu sem erros ou 500, se houve algum erro
     '''
@@ -71,6 +73,8 @@ def user_keep_active(request):
         user.set_last_active_signal(now)
         user.save()
 
+        check_message(user)
+
         return Response(status=status.HTTP_200_OK)
 
     except:
@@ -81,12 +85,12 @@ def user_keep_active(request):
 @permission_classes([permissions.AllowAny])
 def create_user(request):
     ''' Recebe requisições do tipo POST com dados para criação de um novo usuário
-    
+
     Args:
         request: Requisição HTTP do tipo POST.
-    
+
     Returns:
-        Json com informações do usuário criado e código HTTP 201 confirmando a criação do mesmo 
+        Json com informações do usuário criado e código HTTP 201 confirmando a criação do mesmo
         ou json com erro e código HTTP 400, caso houve algum erro
     '''
 
