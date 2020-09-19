@@ -16,7 +16,7 @@ from rest_framework.authtoken.models import Token
 from user.models import User
 from user.serializers import UserSerializer
 
-def is_user_online(user, delta = 60):
+def is_user_online(user, delta = 5):
     '''Verifica se um usuário está online baseado em se ele enviou requisição informando que está ativo nos últimos delta segundos.
     '''
 
