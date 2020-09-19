@@ -43,6 +43,8 @@ def user_keep_active(request):
     O usuário deve mandar requisições períodicas para este local indicando que está ativo.
     '''
 
+    # EXECUCAO DE TESTES
+
     try:
         user = request.user
 
@@ -53,12 +55,14 @@ def user_keep_active(request):
         user.set_last_live_signal(now)
 
         user.save()
-        # check_messages(user)
+        # check_message(user)
 
         return Response(status=status.HTTP_200_OK)
 
     except:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # FIM DOS TESTES
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
