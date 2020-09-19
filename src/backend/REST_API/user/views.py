@@ -16,10 +16,12 @@ from rest_framework.authtoken.models import Token
 from user.models import User
 from user.serializers import UserSerializer
 
+from root.views import check_message
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def user_detail(request, username):
-    #Recupera um usuário por seu username. 
+    #Recupera um usuário por seu username.
     # - As requisições devem ser do tipo GET e serem feitas de usuários autenticados.
 
     try:
@@ -42,7 +44,7 @@ def user_keep_active(request):
     '''
 
     try:
-        user = request.user 
+        user = request.user
 
         now = datetime.now()
         ip_address = request.META['REMOTE_ADDR']
@@ -51,6 +53,7 @@ def user_keep_active(request):
         user.set_last_live_signal(now)
 
         user.save()
+        # check_messages(user)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -75,7 +78,7 @@ def create_user(request):
         user = User.objects.create(**data)
         user.set_password(data['password'])
         user.save()
-        
+
         # criação de token de autenticação do usuário
         Token.objects.create(user=user)
 

@@ -1,10 +1,9 @@
-
 from rest_framework import serializers
 from user.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     # Transforma instância de usuários em Json
-    
+
     password = serializers.CharField(write_only=True)
 
     class Meta:
