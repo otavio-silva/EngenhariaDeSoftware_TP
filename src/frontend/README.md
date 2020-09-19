@@ -19,9 +19,9 @@
     ```
   - Usando a interface e as requisições é possível testar várias funcionalidades.
   - Outro caso de teste é o recebimento de mensagens. Para isso é necessário enviar uma requisição ao servidor Flask.
-    -Note que é possível criar um novo contato (aba de conversa, não um contato mesmo) recebendo uma mensagem desse contato, como no WhatsApp.
-      -Ou seja, se alguém te mandar uma mensagem, o contato dele aparecerá na sua aba.
-    -Exemplo:
+    - Note que é possível criar um novo contato (aba de conversa, não um contato mesmo) recebendo uma mensagem desse contato, como no WhatsApp.
+      - Ou seja, se alguém te mandar uma mensagem, o contato dele aparecerá na sua aba.
+    - Exemplo:
     ```
     import requests
     data = {'id': 123,'sender': 'buhbuh54', 'content': 'teste sucesso', 'created_at': 'data'}
