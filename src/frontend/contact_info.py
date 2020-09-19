@@ -113,7 +113,7 @@ class ContactInfo :
             first_name = req.json()['first_name']
             last_name = req.json()['last_name']
             if first_name == '' and last_name == '':
-                raise
+                raise Exception
             if first_name != '':
                 name = first_name
             if last_name != '':

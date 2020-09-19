@@ -6,8 +6,8 @@ Faz requisição para criar usuário
 Requisição tipo POST
 TODO: campos opcionais 
 '''
-def create_user_request(username, password):
-    data = {"username": username, "password": password}
+def create_user_request(username, password, first_name='', last_name='', ip_address=''):
+    data = {"username": username, "password": password, "first_name": first_name, "last_name": last_name, "ip_address": ip_address}
     req = requests.post('http://localhost:8000/api/users/register', data=data)
     return req
 

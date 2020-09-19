@@ -178,20 +178,25 @@ def login_screen(window):
     entry_password = Entry(login, font = "Helvetica 14")
     entry_password.place(relwidth = 0.4, relheight = 0.12, relx = 0.35, rely = 0.4)
 
+    #Será usada pelo authenticate_user para falar que um erro ocorreu
     label_error = Label(login, text = "Um erro ocorreu ! Tente novamente.", font = "Helvetica 12")
 
     login_action = partial(authenticate_user, entry_username , entry_password, label_error, window, login)
     go = Button(login, text = "LOGAR", font = "Helvetica 14 bold", command = login_action)
     go.place(relx = 0.4, rely = 0.55)
 
+    create_user_action = partial(new_user_window)
+    create_user_button = Button(login, text = "CRIAR NOVO USUÁRIO", font = "Helvetica 16 bold", command = create_user_action)
+    create_user_button.place(relx = 0.4, rely = 0.7)
+
     on_close_login_action = partial(on_close_login, window, login)
     login.protocol("WM_DELETE_WINDOW", on_close_login_action)
-    
+
+
 def on_close_login(window, login):
     print("Fechando...")
     login.destroy()
     window.destroy()
-
 
 '''
 Função chamada ao clicar no botão de Logar
@@ -217,7 +222,63 @@ def login_to_chat(window, login, username, access_token):
     login.destroy() 
     setup_chat(window, username, access_token)
 
-
-
 #Funções para lidar com criação de usuário
+
+'''
+Função que abre janela para criar novo usuário
+'''
+def new_user_window():
+    new_user_window = Toplevel()
+    new_user_window.title("Novo Usuário")
+    new_user_window.geometry('600x400')
+
+    pls = Label(new_user_window, text = "Preencha seus dados:", justify = CENTER, font = "Helvetica 14 bold")
+    pls.place(relheight = 0.15, relx = 0.2, rely = 0.07)
+
+    label_username = Label(new_user_window, text = "Username*: ", font = "Helvetica 12")   
+    label_username.place(relheight = 0.2, relx = 0.1, rely = 0.15)  
+    entry_username = Entry(new_user_window, font = "Helvetica 14") 
+    entry_username.place(relwidth = 0.4, relheight = 0.12, relx = 0.35, rely = 0.2)
+    entry_username.focus()
+
+    label_password = Label(new_user_window, text = "Senha*: ", font = "Helvetica 12")   
+    label_password.place(relheight = 0.2, relx = 0.1, rely = 0.35)
+    entry_password = Entry(new_user_window, font = "Helvetica 14")
+    entry_password.place(relwidth = 0.4, relheight = 0.12, relx = 0.35, rely = 0.4)
+
+    label_first_name = Label(new_user_window, text = "Primeiro Nome: ", font = "Helvetica 12")   
+    label_first_name.place(relheight = 0.2, relx = 0.1, rely = 0.55)
+    entry_first_name = Entry(new_user_window, font = "Helvetica 14")
+    entry_first_name.place(relwidth = 0.4, relheight = 0.12, relx = 0.35, rely = 0.6)
+
+    label_last_name = Label(new_user_window, text = "Último Nome: ", font = "Helvetica 12")   
+    label_last_name.place(relheight = 0.2, relx = 0.1, rely = 0.75)
+    entry_last_name = Entry(new_user_window, font = "Helvetica 14")
+    entry_last_name.place(relwidth = 0.4, relheight = 0.12, relx = 0.35, rely = 0.8)
+
+    create_action = partial(try_create_new_user, entry_username, entry_password, entry_first_name, entry_last_name, new_user_window)
+    go = Button(new_user_window, text = "CRIAR", font = "Helvetica 14 bold", command = create_action)
+    go.place(relx = 0.8, rely = 0.5)
+
+
+'''
+Função que tenta criar novo usuário
+'''
+def try_create_new_user(username_form, password_form, first_name_form, last_name_form, new_user_window):
+    username = username_form.get()
+    password = password_form.get()
+    first_name = first_name_form.get()
+    last_name = last_name_form.get()
+    try:
+        req = create_user_request(username, password, first_name, last_name)
+        if not 'id' in req.json() or not 'username' in req.json():
+            raise Exception
+    except Exception as e:
+        print(e)
+        return
+    
+    print('Usuário Criado')
+    new_user_window.destroy()
+
+
 
