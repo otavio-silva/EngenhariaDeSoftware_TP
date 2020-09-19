@@ -34,9 +34,9 @@ def setup_chat(window, username, access_token):
     # Message area where the messages appear
     msg_area = create_msg_area(window) 
     # Form to write messages
-    msg_send_form = create_msg_send_form(window,msg_area,contact_info)
+    msg_send_form = create_msg_send_form(window,msg_area,contact_info,access_token)
     # Button to send the message 
-    send_text_action = create_send_msg_button(window,msg_area,msg_send_form,contact_info)
+    send_text_action = create_send_msg_button(window,msg_area,msg_send_form,contact_info,access_token)
     # Contact Area
     update_contact_area(window, msg_area, contact_info)
     #Display current messages
@@ -64,14 +64,14 @@ def create_msg_area(window):
     msg_area.tag_configure('tag-right', justify='right')
     return msg_area
 
-def create_msg_send_form(window,msg_area,contact_info):
+def create_msg_send_form(window,msg_area,contact_info, access_token):
     msg_send_form = Entry(window,width=msg_area['width'])
     msg_send_form.grid(column=1, row=2, sticky="ew")
-    msg_send_form.bind("<Return>", (lambda event: send_message(msg_area,msg_send_form,contact_info)))
+    msg_send_form.bind("<Return>", (lambda event: send_message(msg_area,msg_send_form,contact_info,access_token)))
     return msg_send_form
 
-def create_send_msg_button(window,msg_area,msg_form,contact_info):
-    send_text_action = partial(send_message,msg_area,msg_form,contact_info)
+def create_send_msg_button(window,msg_area,msg_form,contact_info,access_token):
+    send_text_action = partial(send_message,msg_area,msg_form,contact_info,access_token)
     send_text_button = Button(window, text=" > ", command=send_text_action)
     send_text_button.grid(column=2, row=2, sticky="ew")
     return send_text_action
@@ -105,11 +105,18 @@ def display_message(msg_area,msg : str):
         msg_area.window_create('end', window=label)
         msg_area.yview_moveto( 1 )
 
-def send_message(msg_area,msg_form, contact_info : ContactInfo):
+def send_message(msg_area,msg_form, contact_info : ContactInfo, access_token):
     #Tenta enviar para o backend, caso dê errado retorna
-
     msg : Message = Message(msg_form.get(),MessageOrigin.SENT)
-    if not msg.text.isspace() and msg:  
+    if not msg.text.isspace() and msg:
+        try:
+            req = send_message_request(contact_info.current_contact.username, msg.text, access_token)
+            print(req.json())
+            message_id = req.json()['created_id'] #Talvez fazer algo com esse id
+        except Exception as e:
+            print(e)
+            return  
+
         display_message(msg_area,msg)
         msg_form.delete(0, 'end')
         contact_info.save_message_current(msg)

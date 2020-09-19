@@ -8,6 +8,7 @@ from rest_requests import *
 
 #TODO Criação de usuário
 #TODO enviar mensagens
+#TODO enviar o ip para o back periodicamente
 #TODO Double tick
 #TODO Criar novo contato
 
@@ -79,7 +80,7 @@ def main():
     window.withdraw()
  
     login_screen(window)
-    #setup_chat(window, 'user1', '')
+    #setup_chat(window, 'user1', '') #Para rodar sem login
 
     window.mainloop()
 
