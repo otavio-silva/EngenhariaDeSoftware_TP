@@ -16,7 +16,7 @@ from rest_framework.authtoken.models import Token
 from user.models import User
 from user.serializers import UserSerializer
 
-from root.view import check_message
+from root.views import check_message
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
@@ -73,12 +73,13 @@ def user_keep_active(request):
         user.set_last_active_signal(now)
         user.save()
 
+        # Checa se o usuario ativo possui alguma mensagem que ainda nao foi recebida
         check_message(user)
 
         return Response(status=status.HTTP_200_OK)
 
     except:
-        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+       return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])

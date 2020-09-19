@@ -19,8 +19,12 @@ from message.models import Message
 from message.serializers import MessageSerializer
 
 def check_message(user):
+    # Verifica se um determinado usuario possui mensagens para serem recebidas
+
     user_receiver = user.id
 
-    user_messages = Message.objects.filter(receiver = user).all()
-    print(user_messages)
-    # user_messages = user_messages.filter(received_at == None).all()
+    user_messages = Message.objects.filter(receiver=user, received_at=None).all()
+
+    if len(user_messages) != 0:
+        for message in user_messages:
+            print(message.created_at)
