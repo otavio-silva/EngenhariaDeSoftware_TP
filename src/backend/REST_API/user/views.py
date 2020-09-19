@@ -16,24 +16,36 @@ from rest_framework.authtoken.models import Token
 from user.models import User
 from user.serializers import UserSerializer
 
-from root.views import check_message
-
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def user_detail(request, username):
-    #Recupera um usuário por seu username.
-    # - As requisições devem ser do tipo GET e serem feitas de usuários autenticados.
+    ''' Recupera um usuário no banco de dados pelo seu `username`.
+    
+    É necessário que o usuário que fez a requisição esteja autenticado e utilize o método GET.
+
+    Args:
+        request: Requisição HTTP do tipo GET
+        username: `username` do usuário a ser recuperado no banco de dados.
+
+    Returns:
+        Json com informações sobre usuário de `username` ou que ele não existe. 
+
+    '''
 
     try:
         user = User.objects.get(username=username)
+
     except:
         content = {'error': f'"{username}" not found.'}
         return JsonResponse(content, status.HTTP_404_NOT_FOUND)
 
+    # Verifica se o usuário está online ou não, atualizando o campo `online` de acordo antes de enviar
+    # a resposta ao front
     user.update_online_status()
 
     serialized_user = UserSerializer(user).data
     return JsonResponse(serialized_user, status=status.HTTP_200_OK)
+
 
 @api_view(['PUT'])
 @permission_classes([permissions.IsAuthenticated])
@@ -41,33 +53,46 @@ def user_keep_active(request):
     '''Mantém o estado do usuário como ativo.
 
     O usuário deve mandar requisições períodicas para este local indicando que está ativo.
+
+    Args:
+        request: Requisição HTTP do tipo PUT.
+    
+    Returns:
+        Código HTTP 200 indicando que a requisição do usuário ocorreu sem erros ou 500, se houve algum erro
     '''
 
     try:
         user = request.user
 
         now = datetime.now()
-        ip_address = request.META['REMOTE_ADDR']
+        ip_address = request.META['REMOTE_ADDR']  # endereço ip do usuário
 
         user.set_ip_address(ip_address)
-        user.set_last_live_signal(now)
-
+        user.set_last_active_signal(now)
         user.save()
-        # check_messages(user)
 
         return Response(status=status.HTTP_200_OK)
 
     except:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def create_user(request):
-    # Cria um usuário por meio de requisições tipo POST
+    ''' Recebe requisições do tipo POST com dados para criação de um novo usuário
+    
+    Args:
+        request: Requisição HTTP do tipo POST.
+    
+    Returns:
+        Json com informações do usuário criado e código HTTP 201 confirmando a criação do mesmo 
+        ou json com erro e código HTTP 400, caso houve algum erro
+    '''
 
     # requesta.data é um dicionário que armazena os dados de criação do usuário
+    # A condição abaixo corrige valores de campos do dicionário vindos como lista (ocorre na biblioteca requests do python)
     if type(request.data) == QueryDict:
-        # Corrige valores de campos do dicionário vindos como lista (ocorre na biblioteca requests do python)
         data = request.data.dict()
 
     else:
