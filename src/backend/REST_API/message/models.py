@@ -2,6 +2,9 @@ from django.db import models
 from user.models import User
 
 class Message(models.Model):
+    ''' Classe responsável por representar uma mensagem trocada entre dois usuários válidos. 
+    '''
+    
     sender = models.ForeignKey(User, related_name='messages_sent', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
 

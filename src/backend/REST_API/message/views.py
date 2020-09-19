@@ -1,14 +1,11 @@
 from datetime import datetime
 from django.http.request import QueryDict
 
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 
-from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-
 from rest_framework import permissions
-from rest_framework import generics
 from rest_framework import status
 
 from user.models import User
@@ -19,34 +16,53 @@ from message.serializers import MessageSerializer
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def message_detail(request, pk):
-    # Função responsável por recuperar ou atualizar mensagem de id = pk
+    '''Recebe requisições do tipo GET para recuperar uma mensagem, ou PUT, para atualizar seu estado.
 
+    Caso a requisição seja do tipo PUT (para atualizar mensagem), os únicos estados que se pode alterar é se a mensagem foi lida
+    ou recebida.
+
+    Args:
+        request: Requisição HTTP do tipo GET ou PUT, para recuperar ou atualizar uma mensagem, respectivamente.
+        pk: Primary Key - chave primária da mensagem a ser recuperada ou alterada
+
+    Returns:
+        JSon com informações sobre a mensagem recuperada ou alterada, com código HTTP 200 
+        ou possíveis erros e seus respectivos código HTTP
+    '''
+
+    # verifica se a mensagem existe
     try:
         message = Message.objects.get(pk=pk)
+
     except:
         content = {'error': 'Message not found.'}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
 
-    # caso a requisição seja do tipo GET, retorna a mensagem para o cliente
+    # caso a requisição seja do tipo GET, a retorna como JSon para o cliente que a requeriu
     if request.method == 'GET':
-        # Serializa o objeto mensagem para json, antes de o enviar ao cliente
+
+        #transforma a instância de mensagem em json
         serialized_message = MessageSerializer(message).data
         return Response(serialized_message, status=status.HTTP_200_OK)
 
-    # a mensagem é do tipo PUT, a requisição é para atualizar seu estado
+    # A requisição é do tipo PUT 
     else:
+
+        # request.data é um dicionário que possui os dados a serem alterados da mensagem, o condicional abaixo
+        # corrige valores de campos do dicionário vindos como lista (ocorre na biblioteca requests do python)
         if type(request.data) == QueryDict:
-            # Corrige valores de campos do dicionário vindos como lista (ocorre na biblioteca requests do python)
             data = request.data.dict()
 
         else:
             data = request.data
 
-        # verifica se a requisição recebida informa que a mensagem foi lida, atualizando o estado da mensagem
+        # verifica se a requisição recebida é para atualizar o estado da mensagem para "read" 
         if data.get('read'):
+            # registra se a mensagem foi recebida, se necessário
             if not message.received_at:
                 message.received_at = datetime.now()
 
+            # registra o horário que a mensagem foi lida
             message.read_at = datetime.now()
             message.save()
 
@@ -56,8 +72,9 @@ def message_detail(request, pk):
             serialized_message = MessageSerializer(message).data
             return Response(serialized_message, status=status.HTTP_200_OK)
 
-        # verifica se a requisição informa que a mensagem foi recebida
+        # verifica se a requisição recebida é para atualizar o estado da mensagem para "received"
         elif data.get('received'):
+            # registra o horário que a mensagem foi recebida
             message.received_at = datetime.now()
             message.save()
 
@@ -67,7 +84,7 @@ def message_detail(request, pk):
             serialized_message = MessageSerializer(message).data
             return Response(serialized_message, status=status.HTTP_200_OK)
 
-        # Mensagens só podem ser atualizadas para "recebida" ou "lida"
+        # Mensagens só podem ser atualizadas para "received" ou "read"
         else:
             content = {
                 'error': 'Use this only to update message status for received or read.'}
@@ -76,15 +93,24 @@ def message_detail(request, pk):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def create_message(request):
-    # Cria uma nova instância dde mensagem no banco de dados. Apenas usuários autenticados e requisições POST
+    '''Recebe uma requisição POST com dados para criar uma nova mensagem
+
+    Args:
+        request: Requisição HTTP do tipo POST com dados de criação de mensagem
+    
+    Returns:
+        JSon com id da mensagem que foi criada ou de erros, com o respectivo código HTTP.
+    
+    '''
+
+    # request.data é um dicionário que possui os dados de criação da mensagem, a condicional abaixo
+    # corrige valores de campos do dicionário vindos como lista (ocorre na biblioteca requests do python)
     if type(request.data) == QueryDict:
-        # Corrige valores de campos do dicionário vindos como lista (ocorre na biblioteca requests do python)
         data = request.data.dict()
 
     else:
         data = request.data
 
-    # sequencia de verificações para validar mensagens
     # TODO: Validar mensagem em função específica
 
     # verifica se o destino da mensagem é válido
@@ -97,9 +123,7 @@ def create_message(request):
     try:
         receiver = User.objects.get(username=receiver_username)
 
-    except Exception as e:
-        print(e)
-
+    except:
         content = {'error': f'"{receiver_username}" not found.'}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
 
@@ -114,21 +138,18 @@ def create_message(request):
         content = {'error': f'Empty message is not valid.'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
-    # Fim de sequencia de verificação de validade de mensagens
-    
-    else:
-        try:
-            # Tenta criar uma nova instância de mensagem
-            message = Message.objects.create(
-                        sender=request.user,
-                        receiver=receiver,
-                        content=message_content
-                    )
+    # Tenta criar uma nova instância de mensagem
+    try:
+        message = Message.objects.create(
+                    sender=request.user,
+                    receiver=receiver,
+                    content=message_content
+                )
 
-            message.save()
+        message.save()
 
-            content = {'created_id': message.id}
-            return Response(content, status=status.HTTP_201_CREATED)
+        content = {'created_id': message.id}
+        return Response(content, status=status.HTTP_201_CREATED)
 
-        except:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
