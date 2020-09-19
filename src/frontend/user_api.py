@@ -7,7 +7,6 @@ from rest_requests import *
 
 
 #TODO Criação de usuário
-#TODO enviar mensagens
 #TODO enviar o ip para o back periodicamente
 #TODO Double tick
 #TODO Criar novo contato

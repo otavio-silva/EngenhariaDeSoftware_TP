@@ -48,8 +48,6 @@ def setup_chat(window, username, access_token):
     on_close_args = partial(on_close, window,contact_info)
     window.protocol("WM_DELETE_WINDOW", on_close_args)
 
-    #return contact_info, msg_area
-
 
 def create_contact_area(window):
     contact_area = scrolledtext.ScrolledText(window,width=15,height=10)
@@ -154,10 +152,6 @@ def on_close(window,contact_info):
         window.destroy()
         contact_info.persist()
 
-
-#Funções para lidar com criação de usuário
-
-
 #Funções para lidar com login de usuário
 
 '''
@@ -189,7 +183,16 @@ def login_screen(window):
     login_action = partial(authenticate_user, entry_username , entry_password, label_error, window, login)
     go = Button(login, text = "LOGAR", font = "Helvetica 14 bold", command = login_action)
     go.place(relx = 0.4, rely = 0.55)
+
+    on_close_login_action = partial(on_close_login, window, login)
+    login.protocol("WM_DELETE_WINDOW", on_close_login_action)
     
+def on_close_login(window, login):
+    print("Fechando...")
+    login.destroy()
+    window.destroy()
+
+
 '''
 Função chamada ao clicar no botão de Logar
 Caso a autenticação dê errado, não vai para frente
@@ -206,7 +209,6 @@ def authenticate_user(username_form, password_form, label_error, window, login):
         print(e)
         return
     login_to_chat(window, login, username, access_token)
-    #return access_token
 
 '''
 Função que troca de janelas do login para o chat
@@ -214,3 +216,8 @@ Função que troca de janelas do login para o chat
 def login_to_chat(window, login, username, access_token):
     login.destroy() 
     setup_chat(window, username, access_token)
+
+
+
+#Funções para lidar com criação de usuário
+
