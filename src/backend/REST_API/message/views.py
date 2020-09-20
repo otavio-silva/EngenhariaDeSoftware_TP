@@ -13,6 +13,8 @@ from user.models import User
 from message.models import Message
 from message.serializers import MessageSerializer
 
+from root.views import notify_user_read
+
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def message_detail(request, pk):
@@ -66,19 +68,8 @@ def message_detail(request, pk):
             message.read_at = datetime.now()
             message.save()
 
-            # TODO: Notificar ao usuário que enviou a mensagem que seu estado foi atualizado para "lida"
-
-            # transforma a instância de mensagem em json
-            serialized_message = MessageSerializer(message).data
-            return Response(serialized_message, status=status.HTTP_200_OK)
-
-        # verifica se a requisição recebida é para atualizar o estado da mensagem para "received"
-        elif data.get('received'):
-            # registra o horário que a mensagem foi recebida
-            message.received_at = datetime.now()
-            message.save()
-
-            # TODO: Notificar quem enviou a mensagem que ela foi recebida
+            # Notifica ao usuário que enviou a mensagem que seu estado foi atualizado para "lida"
+            notify_user_read(message.id)
 
             # transforma a instância de mensagem em json
             serialized_message = MessageSerializer(message).data

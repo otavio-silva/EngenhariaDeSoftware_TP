@@ -16,7 +16,7 @@ from rest_framework.authtoken.models import Token
 from user.models import User
 from user.serializers import UserSerializer
 
-from root.views import check_message
+from root.views import check_messages
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
@@ -85,14 +85,14 @@ def user_keep_active(request):
 
             # Checa se o usuario ativo possui alguma mensagem que ainda nao foi recebida
             # Caso possua, promove o recebimento delas
-            check_message(request)
+            check_messages(request)
 
             return Response(status=status.HTTP_200_OK)
 
         else:
             content = {'error': 'You must define the port you are running'}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
-    
+
     except:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
