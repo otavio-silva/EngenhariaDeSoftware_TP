@@ -29,11 +29,11 @@ def receive_message_from_request():
         #created_at = request.form['created_at']
         #Escrever no arquivo e só depois enviar a resposta
         receive_message_from_server(message_id, sender_username, message_content)
-        response = make_response(jsonify({"success": "Mensagem enviada com sucesso"}), 201)
+        response = make_response(jsonify({"success": True}), 201)
 
     except Exception as e:
         print(e)
-        response = make_response(jsonify({"error": "Algo deu errado no processamento da mensagem"}), 500)
+        response = make_response(jsonify({"success": False}), 500)
     
     return response
 
