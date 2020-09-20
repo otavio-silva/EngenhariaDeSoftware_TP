@@ -41,6 +41,9 @@ class User(AbstractUser):
     # endereço ip do usuário, útil para rotear mensagens a ele
     ip_address = models.CharField('IP Address', max_length=12, default='127.0.0.1')
 
+    #porta do usuário
+    port = models.PositiveIntegerField('Port', default=5000)
+
     # timestamp do último sinal enviado pelo usuário pelo front de que está ativo
     last_active_signal = models.DateTimeField('Last live signal', auto_now_add=True) 
 
@@ -68,6 +71,15 @@ class User(AbstractUser):
         '''
         self.ip_address = new_ip 
 
+    def set_port(self, port):
+        '''Atualiza a porta do usuário
+        Args:
+            port: porta do usuário
+        Returns:
+            None
+        '''
+        self.port = port
+        
     def set_last_active_signal(self, time_active_signal):
         '''Atualiza o último horário que o usuário mandou sinal de que está ativo
 

@@ -64,21 +64,35 @@ def user_keep_active(request):
     '''
 
     try:
-        user = request.user
+        if type(request.data) == QueryDict:
+            data = request.data.dict()
 
-        now = datetime.now()
-        ip_address = request.META['REMOTE_ADDR']  # endereço ip do usuário
+        else:
+            data = request.data
 
-        user.set_ip_address(ip_address)
-        user.set_last_active_signal(now)
-        user.save()
+        if data.get('port'):
+            user = request.user
 
-        # Checa se o usuario ativo possui alguma mensagem que ainda nao foi recebida
-        # Caso possua, promove o recebimento delas
-        check_message(request)
+            now = datetime.now()
+            ip_address = request.META['REMOTE_ADDR']  # endereço ip do usuário
+            port = data['port']
 
-        return Response(status=status.HTTP_200_OK)
+            user.set_ip_address(ip_address)
+            user.set_last_active_signal(now)
+            user.set_port(port)
 
+            user.save()
+
+            # Checa se o usuario ativo possui alguma mensagem que ainda nao foi recebida
+            # Caso possua, promove o recebimento delas
+            check_message(request)
+
+            return Response(status=status.HTTP_200_OK)
+
+        else:
+            content = {'error': 'You must define the port you are running'}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    
     except:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
