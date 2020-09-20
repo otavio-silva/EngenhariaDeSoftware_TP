@@ -160,11 +160,11 @@ access_token = req.json()['token']
         - Se sucesso, json com o estado atual da mensagem.
         - Se falha, json informando o erro.
 - Atualizar estado da mensagem lida: **[PUT]** http://localhost:8000/api/messages/{message_id} com json informando se a mensagem foi lida. Isto é:
-        ```json
-        {
-            "read": true
-        }
-        ```
+    ```json
+    {
+	    'read': true
+    }
+    ```
     - Resultado esperado:
         - Json com o estado atual da mensagem ou informações de erros.
 
