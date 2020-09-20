@@ -159,14 +159,7 @@ access_token = req.json()['token']
     - Resposta esperada:
         - Se sucesso, json com o estado atual da mensagem.
         - Se falha, json informando o erro.
-- Atualizar estado da mensagem para recebida ou lida: **[PUT]** http://localhost:8000/api/messages/{message_id} com json informando se a mensagem foi recebida ou lida. Isto é:
-    - Se mensagem foi recebida:
-        ```json
-        {
-            "received": true
-        }
-        ```
-    - Se a mensagem foi lida:
+- Atualizar estado da mensagem lida: **[PUT]** http://localhost:8000/api/messages/{message_id} com json informando se a mensagem foi lida. Isto é:
         ```json
         {
             "read": true
