@@ -80,7 +80,7 @@ def user_keep_active(request):
         return Response(status=status.HTTP_200_OK)
 
     except:
-       return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])

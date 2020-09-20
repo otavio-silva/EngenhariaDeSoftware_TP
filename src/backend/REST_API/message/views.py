@@ -26,7 +26,7 @@ def message_detail(request, pk):
         pk: Primary Key - chave primária da mensagem a ser recuperada ou alterada
 
     Returns:
-        JSon com informações sobre a mensagem recuperada ou alterada, com código HTTP 200 
+        JSon com informações sobre a mensagem recuperada ou alterada, com código HTTP 200
         ou possíveis erros e seus respectivos código HTTP
     '''
 
@@ -45,7 +45,7 @@ def message_detail(request, pk):
         serialized_message = MessageSerializer(message).data
         return Response(serialized_message, status=status.HTTP_200_OK)
 
-    # A requisição é do tipo PUT 
+    # A requisição é do tipo PUT
     else:
 
         # request.data é um dicionário que possui os dados a serem alterados da mensagem, o condicional abaixo
@@ -56,7 +56,7 @@ def message_detail(request, pk):
         else:
             data = request.data
 
-        # verifica se a requisição recebida é para atualizar o estado da mensagem para "read" 
+        # verifica se a requisição recebida é para atualizar o estado da mensagem para "read"
         if data.get('read'):
             # registra se a mensagem foi recebida, se necessário
             if not message.received_at:
@@ -86,9 +86,9 @@ def message_detail(request, pk):
 
         # Mensagens só podem ser atualizadas para "received" ou "read"
         else:
-            content = {
-                'error': 'Use this only to update message status for received or read.'}
+            content = {'error': 'Use this only to update message status for received or read.'}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -97,10 +97,10 @@ def create_message(request):
 
     Args:
         request: Requisição HTTP do tipo POST com dados de criação de mensagem
-    
+
     Returns:
         JSon com id da mensagem que foi criada ou de erros, com o respectivo código HTTP.
-    
+
     '''
 
     # request.data é um dicionário que possui os dados de criação da mensagem, a condicional abaixo

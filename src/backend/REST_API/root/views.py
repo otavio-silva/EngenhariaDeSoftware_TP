@@ -25,15 +25,16 @@ def check_message(request):
     # Verifica se um determinado usuario possui mensagens para serem recebidas
     # Caso possua, promove o recebimento delas e a alteracao no BD
 
+    # Analisa se o usuario possui alguma mensagem nao recebida
     try:
         user_messages = Message.objects.filter(receiver=request.user, received_at=None).all()
     except:
         content = {'error: messages cannot be accessed.'}
         print(content)
 
+    # Tenta o envio de cada uma das mensagens
     if len(user_messages) != 0:
         for message in user_messages:
-            print(message)
 
             # Dados para requisicao a ser enviada para o front
             data = {'id':message.id,'sender':message.sender, 'content':message.content, 'created_at':message.created_at}
@@ -41,18 +42,17 @@ def check_message(request):
             # TODO: testar o envio e o recebimento de requisicoes para o front apos a integracao
 
             try:
-                # Promove o envio da mensagem para o frontend por meio de abertura de uma requisicao
+                # Promove o envio da mensagem para o frontend, para o usuario de destino
                 response = requests.post("http://127.0.0.1:5000/api/messages", data=data)
             except:
-                content = {'error: request has not been sent to frontend.'}
-                print(content)
+                print('error in message id=', message.id, ': request has not been sent to frontend.')
 
             try:
                 # Caso a mensagem seja recebida
                 # Insere a data e hora de recebimento da mensagem na instancia da mensagem
                 if response.success == True:
+                    # alterar
                     message.received_at = datetime.now()
                     message.save()
             except:
-                content = {'error: frontend request has not been correctly received.'}
-                print(content)
+                print('error in message id=', message.id, ': frontend request has not been correctly received.')
