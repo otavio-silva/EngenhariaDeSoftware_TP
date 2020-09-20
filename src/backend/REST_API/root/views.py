@@ -40,6 +40,9 @@ def check_messages(request):
 
             # TODO: testar o envio e o recebimento de requisicoes para o front apos a integracao
 
+            # Recuperando a instancia de um determinado usuario do BD - exemplo: 'message.sender' eh o ID de um determinado usuario
+            # user = User.objects.get(id=message.sender)
+
             try:
                 # Promove o envio da mensagem para o frontend, para o usuario de destino
                 response = requests.post("http://localhost:port/api/messages", data=data)
