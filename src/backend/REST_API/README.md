@@ -11,7 +11,7 @@
 - [x] Rotear mensagens para seu usuário de destino (História 3)
 - [x] Notificar usuários relacionados a uma mensagem de mudanças de estado na mesma para recebida/lida (História 6)
 - [x] Mecanismo que envia mensagens para usuários de destino assim que ele fique online  (História 3, 4, 6)
-- [ ] Processar requisições períodicas do Front e atualizar estado de um usuário para online/offline, bem como seu IP para roteamento de mensagens (História 3)
+- [x] Processar requisições períodicas do Front e atualizar estado de um usuário para online/offline, bem como seu IP para roteamento de mensagens (História 3)
 
 ## Instalações
 
