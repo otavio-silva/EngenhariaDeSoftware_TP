@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 from django.http.request import QueryDict
 
 from django.http import JsonResponse
@@ -62,10 +62,10 @@ def message_detail(request, pk):
         if data.get('read'):
             # registra se a mensagem foi recebida, se necessário
             if not message.received_at:
-                message.received_at = datetime.now()
+                message.received_at = timezone.now()
 
             # registra o horário que a mensagem foi lida
-            message.read_at = datetime.now()
+            message.read_at = timezone.now()
             message.save()
 
             # Notifica ao usuário que enviou a mensagem que seu estado foi atualizado para "lida"

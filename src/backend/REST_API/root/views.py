@@ -12,7 +12,7 @@ from rest_framework import permissions
 from rest_framework import generics
 from rest_framework import status
 
-from datetime import datetime
+from django.utils import timezone
 
 from user.models import User
 from user.serializers import UserSerializer
@@ -51,7 +51,7 @@ def check_messages(request):
                 # Insere a data e hora de recebimento da mensagem na instancia da mensagem
                 if response.success == True:
 
-                    message.received_at = datetime.now()
+                    message.received_at = timezone.now()
                     message.save()
 
                     # Notifica quem enviou a mensagem que ela foi recebida pelo destinatario

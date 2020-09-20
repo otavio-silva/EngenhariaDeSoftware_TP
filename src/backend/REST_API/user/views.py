@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 
 from django.http import HttpResponse, JsonResponse
 from django.http.request import QueryDict
@@ -73,7 +73,7 @@ def user_keep_active(request):
         if data.get('port'):
             user = request.user
 
-            now = datetime.now()
+            now = timezone.now()
             ip_address = request.META['REMOTE_ADDR']  # endereço ip do usuário
             port = data['port']
 
