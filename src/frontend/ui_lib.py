@@ -43,10 +43,23 @@ def setup_chat(window, username, access_token):
     msg_area.delete("1.0",END)
     for msg in contact_info.current_contact.messages:
         display_message(msg_area,msg)
-
+    port = 5000
+    send_keep_active(access_token, port, window)
     # make the top right close button minimize (iconify) the main window
     on_close_args = partial(on_close, window,contact_info)
     window.protocol("WM_DELETE_WINDOW", on_close_args)
+
+'''
+Função recursiva com timer
+Envia uma requisição a cada 4 segundos
+'''
+def send_keep_active(access_token, port, window):
+    try:
+        req = keep_active_request(port, access_token)
+    except:
+        print("Algo deu errado no keep active")
+        
+    window.after(4000, send_keep_active, access_token, port, window)  
 
 
 def create_contact_area(window):

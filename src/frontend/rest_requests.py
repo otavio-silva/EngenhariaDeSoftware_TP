@@ -60,6 +60,18 @@ def update_message_state_request(received, read, message_id, access_token):
     req = requests.put('http://localhost:8000/api/messages/' + str(message_id), headers=headers, data=data)
     return req
 
+#Kepp active
+'''
+Faz requisição que mantém usuário como ativo no back end
+Requisição tipo PUT
+'''
+def keep_active_request(port, access_token):
+    headers = {'Authorization': f'Token {access_token}'}
+    data = {'port' : port}
+    req = requests.put('http://localhost:8000/api/keep-active', headers=headers, data=data)
+    return req
+
+
 
 
 
@@ -71,6 +83,8 @@ print(req.json())
 req = authenticate_user_request(username, password)
 print(req.json())
 access_token = req.json()['token']
+req = keep_active_request(5000, access_token)
+print(req)
 req = get_user_info_request(username, access_token)
 print(req.json())
 req = send_message_request("usr2", "Mensagem sendo enviada", access_token)
