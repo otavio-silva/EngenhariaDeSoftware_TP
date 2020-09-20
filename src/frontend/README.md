@@ -1,5 +1,5 @@
 - Como rodar o frontend ?
-  - python user_api.py
+  - python user_api.py <num_port>
   - Este comando começará o servidor do lado do frontend que serve para receber mensagens e requisições de confirmação, tudo feito por uma API REST.
   - E começará a interface gráfica. 
   

@@ -20,7 +20,7 @@ Função que cria a tela principal.
 Também preenche as variáveis globais msg_area e contact_info
 Recebe o username
 '''
-def setup_chat(window, username, access_token):
+def setup_chat(window, username, access_token, port):
     global msg_area
     global contact_info
     # Dummy contact info => Variável usada por outras funções
@@ -43,7 +43,7 @@ def setup_chat(window, username, access_token):
     msg_area.delete("1.0",END)
     for msg in contact_info.current_contact.messages:
         display_message(msg_area,msg)
-    port = 5000
+
     send_keep_active(access_token, port, window)
     # make the top right close button minimize (iconify) the main window
     on_close_args = partial(on_close, window,contact_info)
@@ -58,7 +58,7 @@ def send_keep_active(access_token, port, window):
         req = keep_active_request(port, access_token)
     except:
         print("Algo deu errado no keep active")
-        
+
     window.after(4000, send_keep_active, access_token, port, window)  
 
 
@@ -174,7 +174,7 @@ Função que cria a tela de login
 Pega username e token de autenticação
 Pode redirecionar para tela de criação de usuário
 '''
-def login_screen(window):
+def login_screen(window, port):
     login = Toplevel()
     login.title("Login") 
     login.geometry('600x400')
@@ -196,7 +196,7 @@ def login_screen(window):
     #Será usada pelo authenticate_user para falar que um erro ocorreu
     label_error = Label(login, text = "Um erro ocorreu ! Tente novamente.", font = "Helvetica 12")
 
-    login_action = partial(authenticate_user, entry_username , entry_password, label_error, window, login)
+    login_action = partial(authenticate_user, entry_username , entry_password, label_error, window, login, port)
     go = Button(login, text = "LOGAR", font = "Helvetica 14 bold", command = login_action)
     go.place(relx = 0.4, rely = 0.55)
 
@@ -218,7 +218,7 @@ Função chamada ao clicar no botão de Logar
 Caso a autenticação dê errado, não vai para frente
 Caso dê certo, chama a função de trocar de janela
 '''
-def authenticate_user(username_form, password_form, label_error, window, login):
+def authenticate_user(username_form, password_form, label_error, window, login, port):
     username = username_form.get()
     password = password_form.get()
     try:
@@ -228,14 +228,14 @@ def authenticate_user(username_form, password_form, label_error, window, login):
         label_error.place(relx = 0.4, rely = 0.6)
         print(e)
         return
-    login_to_chat(window, login, username, access_token)
+    login_to_chat(window, login, username, access_token, port)
 
 '''
 Função que troca de janelas do login para o chat
 '''
-def login_to_chat(window, login, username, access_token):
+def login_to_chat(window, login, username, access_token, port):
     login.destroy() 
-    setup_chat(window, username, access_token)
+    setup_chat(window, username, access_token, port)
 
 #Funções para lidar com criação de usuário
 

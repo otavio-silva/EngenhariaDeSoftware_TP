@@ -4,6 +4,7 @@ import threading
 from ui_lib import *
 from contact_info import *
 from rest_requests import *
+import sys
 
 #TODO enviar o ip para o back periodicamente
 #TODO Double tick: Enviar requsição informando que leu uma conversa com username X pque tinha novas msgs (LIDA)
@@ -70,7 +71,9 @@ def main():
     #Começa o Servidor
     #print(" Go to http://127.0.0.1:5000/api/messages to see the request result")
     #app.run(host='0.0.0.0', port=80) #Escolher outra porta
-    server_thread = threading.Thread(target=app.run, args=tuple(), daemon=True)
+    port = int(sys.argv[1])
+
+    server_thread = threading.Thread(target=app.run, kwargs={'port': port}, daemon=True)
     server_thread.start()
 
     #User Interface
@@ -79,7 +82,7 @@ def main():
     window = Tk()
     window.withdraw()
  
-    login_screen(window)
+    login_screen(window, port)
     #setup_chat(window, 'user1', '') #Para rodar sem login
 
     window.mainloop()
