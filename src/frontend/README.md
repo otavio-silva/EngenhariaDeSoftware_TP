@@ -38,10 +38,14 @@
       data:
       
         {'id': "id da mensagem", 'sender': "username", 'content': "Conteúdo da mensagem", 'created_at': "Data de criação no formato do backend"}
+     
+     Response: Caso dê certo:  {'success': True}, 201
+ 
         
       -Exemplo: 
               
                 data = {'id': 123,'sender': 'new_user', 'content': 'teste sucesso', 'created_at': 'data'}
       
                 response = requests.post("http://127.0.0.1:5000/api/messages", data=data)
+         
     
