@@ -6,7 +6,8 @@ from contact_info import *
 from rest_requests import *
 
 #TODO enviar o ip para o back periodicamente
-#TODO Double tick
+#TODO Double tick: Enviar requsição informando que leu uma conversa com username X pque tinha novas msgs (LIDA)
+# Receber requisições que um usuario leu ou recebeu mensagens.
 #TODO Criar novo contato
 
 app = flask.Flask(__name__)
@@ -57,6 +58,7 @@ def receive_message_from_server(message_id, sender_username, message_content):
     if not msg.text.isspace() and msg:
         if contact_info.current_contact.username == sender_username:
             display_message(msg_area, msg)
+        msg.set_message_id(message_id)
         contact_info.save_message(msg, sender_contact)
         contact_info.persist()
 
@@ -67,6 +69,7 @@ Possui uma variável global para ser acessada pelo Flask
 def main():
     #Começa o Servidor
     #print(" Go to http://127.0.0.1:5000/api/messages to see the request result")
+    #app.run(host='0.0.0.0', port=80) #Escolher outra porta
     server_thread = threading.Thread(target=app.run, args=tuple(), daemon=True)
     server_thread.start()
 

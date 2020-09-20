@@ -12,10 +12,14 @@ class MessageOrigin(Enum):
 
 class Message :
 
-    def __init__(self, text, origin : MessageOrigin):
+    def __init__(self, text, origin : MessageOrigin, msg_id=None):
         self.text = text
         self.origin = origin
         self.persisted = False
+        self.id = msg_id
+    
+    def set_message_id(self, msg_id):
+        self.id = int(msg_id)
 
     def format_to_display(self, max_chars=25):
         count = 0
@@ -32,8 +36,8 @@ class Message :
         self.persisted = True
 
     def to_csv_line(self) :
-        return str(self.origin.value) + "," + self.text
+        return str(self.origin.value) + "," + self.text + "," + str(self.id)
 
     def from_csv_line(self,line):
         s=line.split(",")
-        return Message(s[1],self.origin.from_value(int(s[0])))
+        return Message(s[1],self.origin.from_value(int(s[0])),int(s[2]))

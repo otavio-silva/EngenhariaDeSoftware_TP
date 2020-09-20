@@ -73,7 +73,7 @@ def create_send_msg_button(window,msg_area,msg_form,contact_info,access_token):
     send_text_button = Button(window, text=" > ", command=send_text_action)
     send_text_button.grid(column=2, row=2, sticky="ew")
     return send_text_action
-
+'''
 def create_msg_receive_form(window,msg_area,contact_info):
     msg_receive_form = Entry(window,width=msg_area['width'])
     msg_receive_form.grid(column=1, row=3, sticky="ew")
@@ -85,6 +85,7 @@ def create_receive_msg_button(window,msg_area,msg_form,contact_info):
     receive_text_button = Button(window, text=" < ", command=receive_text_action)
     receive_text_button.grid(column=2, row=3, sticky="ew")
     return receive_text_action
+'''
 
 def display_message(msg_area,msg : str):
     txt = msg.format_to_display()
@@ -114,12 +115,12 @@ def send_message(msg_area,msg_form, contact_info : ContactInfo, access_token):
         except Exception as e:
             print(e)
             return  
-
+        msg.set_message_id(message_id)
         display_message(msg_area,msg)
         msg_form.delete(0, 'end')
         contact_info.save_message_current(msg)
         contact_info.persist()
-
+'''
 def receive_message(msg_area,msg_form, contact_info : ContactInfo):
     msg : Message = Message(msg_form.get(),MessageOrigin.RECEIVED)
     if not msg.text.isspace() and msg:  
@@ -127,6 +128,7 @@ def receive_message(msg_area,msg_form, contact_info : ContactInfo):
         msg_form.delete(0, 'end')
         contact_info.save_message_current(msg)
         contact_info.persist()
+'''
 
 def change_current_conversation(msg_area,contact,contact_info,current_contact_lbl):
     current_contact_lbl['text'] = contact.name
