@@ -75,8 +75,7 @@ def user_keep_active(request):
 
         # Checa se o usuario ativo possui alguma mensagem que ainda nao foi recebida
         # Caso possua, promove o recebimento delas
-
-        # check_message(request)
+        check_message(request)
 
         return Response(status=status.HTTP_200_OK)
 
