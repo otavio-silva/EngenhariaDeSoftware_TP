@@ -33,7 +33,7 @@
   - Por meio de requisições REST: (Por enquanto localmente)
     - Requisição para enviar mensagem: POST
     
-      http://127.0.0.1:5000/api/messages
+      http://127.0.0.1:port/api/messages
       
       data:
       
@@ -47,5 +47,19 @@
                 data = {'id': 123,'sender': 'new_user', 'content': 'teste sucesso', 'created_at': 'data'}
       
                 response = requests.post("http://127.0.0.1:5000/api/messages", data=data)
+      - Atualizar estado da mensagem para recebida ou lida: **[PUT]** http://localhost:port/api/messages/{message_id} com json informando se a mensagem foi recebida ou lida. Isto é:
+    - Se mensagem foi recebida:
+        ```json
+        {
+            "received": true
+        }
+        ```
+    - Se a mensagem foi lida:
+        ```json
+        {
+            "read": true
+        }
+        ```
+     - Response: Caso dê certo:  {'success': True}, 201
          
     

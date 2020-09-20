@@ -6,7 +6,6 @@ from contact_info import *
 from rest_requests import *
 import sys
 
-#TODO enviar o ip para o back periodicamente
 #TODO Double tick: Enviar requsição informando que leu uma conversa com username X pque tinha novas msgs (LIDA)
 # Receber requisições que um usuario leu ou recebeu mensagens.
 #TODO Criar novo contato
@@ -64,6 +63,29 @@ def receive_message_from_server(message_id, sender_username, message_content):
         contact_info.persist()
 
 '''
+URL para alterar o status de uma mensagem
+data:
+    {'received' : bool
+    'read': bool}
+'''
+@app.route('/api/messages/<message_id>', methods=['PUT'])
+def update_message_status_from_request(message_id):
+    try:
+        message_id = int(message_id)
+        received = request.form['received'] #Alterar para ser opcional os campos
+        read = request.form['read']
+        #Escrever no arquivo e só depois enviar a resposta
+        
+        response = make_response(jsonify({"success": True}), 201)
+
+    except Exception as e:
+        print(e)
+        response = make_response(jsonify({"success": False}), 500)
+    
+    return response
+
+
+'''
 Função main do programa
 Possui uma variável global para ser acessada pelo Flask
 '''
@@ -87,52 +109,6 @@ def main():
 
     window.mainloop()
 
-    '''
-    # Dummy contact info => Variável usada por outras funções
-    global contact_info
-    contact_info = ContactInfo()
-
-    window.title("Omicron Messenger")
-    window.geometry('600x400')
-
-    #Tela de Login
-
-    # Profile picture placeholder
-    lbl = Label(window, text="PP", font=("Arial Bold", 50))
-    lbl.grid(column=0, row=0, sticky="ew")
-
-    # Message area where the messages appear
-    global msg_area
-    msg_area = create_msg_area(window) 
-    # Form to write messages
-    msg_send_form = create_msg_send_form(window,msg_area,contact_info)
-    # Button to send the message 
-    send_text_action = create_send_msg_button(window,msg_area,msg_send_form,contact_info)
-    # Form to receive messages (will remove it once the rest method calls the receive_message function)
-    #msg_receive_form = create_msg_receive_form(window,msg_area,contact_info)
-    # Button to receive the message 
-    #receive_text_action = create_receive_msg_button(window,msg_area,msg_receive_form,contact_info)
-    # Contact Area
-    #contact_area = create_contact_area(window)
-    #current_contact_lbl = Label(window, text=contact_info.current_contact.name, font=("Arial Bold", 20))
-    #current_contact_lbl.grid(column=1, row=0, sticky="s")
-    #update_contact_area(contact_area, contact_info, window, msg_area, current_contact_lbl)
-    # Contact Area
-    update_contact_area(window, msg_area, contact_info)
-    
-    
-    # make the top right close button minimize (iconify) the main window
-    on_close_args = partial(on_close, window,contact_info)
-    window.protocol("WM_DELETE_WINDOW", on_close_args)
-    
-
-    #Isso gera erro no uso de thread separada para o Flask
-    #while True: 
-    #    window.after(2)
-    #    window.update()
-    
-    window.mainloop()
-    '''
 
 if __name__ == "__main__":
     main()
