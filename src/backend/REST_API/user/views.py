@@ -48,6 +48,18 @@ def user_detail(request, username):
     serialized_user = UserSerializer(user).data
     return JsonResponse(serialized_user, status=status.HTTP_200_OK)
 
+'''
+Classe para executar uma função após o envio da Response
+'''
+class ResponseThen(Response):
+    def __init__(self, then_callback, request, **kwargs):
+        super().__init__(**kwargs)
+        self.then_callback = then_callback
+        self.request = request
+
+    def close(self):
+        super().close()
+        self.then_callback(self.request)
 
 @api_view(['PUT'])
 @permission_classes([permissions.IsAuthenticated])
@@ -85,9 +97,10 @@ def user_keep_active(request):
 
             # Checa se o usuario ativo possui alguma mensagem que ainda nao foi recebida
             # Caso possua, promove o recebimento delas
-            check_messages(request)
+            #check_messages(request) #Estava atrapalhando no front
 
-            return Response(status=status.HTTP_200_OK)
+            #return Response(status=status.HTTP_200_OK)
+            return ResponseThen(check_messages, request, status=status.HTTP_200_OK)
 
         else:
             content = {'error': 'You must define the port you are running'}

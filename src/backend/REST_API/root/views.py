@@ -41,11 +41,12 @@ def check_messages(request):
             # TODO: testar o envio e o recebimento de requisicoes para o front apos a integracao
 
             # Recuperando a instancia de um determinado usuario do BD - exemplo: 'message.sender' eh o ID de um determinado usuario
-            # user = User.objects.get(id=message.sender)
+            user = User.objects.get(username=message.receiver)
+            port = user.port
 
             try:
                 # Promove o envio da mensagem para o frontend, para o usuario de destino
-                response = requests.post("http://localhost:port/api/messages", data=data)
+                response = requests.post("http://localhost:" + str(port) + "/api/messages", data=data)
             except:
                 print('error in message id=', message.id, ': request has not been sent to frontend.')
 
@@ -58,15 +59,15 @@ def check_messages(request):
                     message.save()
 
                     # Notifica quem enviou a mensagem que ela foi recebida pelo destinatario
-                    notify_user_received(message.id)
+                    notify_user_received(message.id, port)
             except:
                 print('error in message id=', message.id, ': frontend request has not been correctly receive.')
 
 
-def notify_user_read(id):
+def notify_user_read(id, port):
     # Notifica um usuario de que a mensagem enviada por ele foi lida pelo destinatario
 
-    user_adress =  'http://localhost:port/api/messages/' + str(id)
+    user_adress =  'http://localhost:' + str(port) + '/api/messages/' + str(id)
     data = {'read': True}
     try:
         response = requests.put(user_adress, data=data)
@@ -76,10 +77,10 @@ def notify_user_read(id):
         print('error: read notification of message', id, 'has not been sent to frontend.')
 
 
-def notify_user_received(id):
+def notify_user_received(id, port):
     # Notifica um usuario de que a mensagem enviada por ele foi recebida pelo destinatario
 
-    user_adress =  'http://localhost:port/api/messages/' + str(id)
+    user_adress =  'http://localhost:' + str(port) + '/api/messages/' + str(id)
     data = {'received': True}
     try:
         response = requests.put(user_adress, data=data)
