@@ -27,7 +27,7 @@ def setup_chat(window, username, access_token, port):
     contact_info = ContactInfo(username, access_token)
     window.deiconify() #Mostra a window que estava escondida
     window.title("Omicron Messenger")
-    window.geometry('600x400')
+    window.geometry('800x400')
     # Profile picture placeholder
     lbl = Label(window, text="PP", font=("Arial Bold", 50))
     lbl.grid(column=0, row=0, sticky="ew")
@@ -37,6 +37,10 @@ def setup_chat(window, username, access_token, port):
     msg_send_form = create_msg_send_form(window,msg_area,contact_info,access_token)
     # Button to send the message 
     send_text_action = create_send_msg_button(window,msg_area,msg_send_form,contact_info,access_token)
+    #New contact form
+    new_contact_form = create_new_contact_form(window, msg_area, contact_info)
+    #New contact button
+    new_contact_button = create_new_contact_button(window, msg_area, contact_info, new_contact_form)
     # Contact Area
     update_contact_area(window, msg_area, contact_info)
     #Display current messages
@@ -61,6 +65,22 @@ def send_keep_active(access_token, port, window):
 
     window.after(4000, send_keep_active, access_token, port, window)  
 
+def create_new_contact_form(window, msg_area, contact_info):
+    new_contact_form = Entry(window,width=msg_area['width'])
+    new_contact_form.grid(column=1, row=4, sticky="ew")
+    new_contact_form.bind("<Return>", (lambda event: create_new_contact(window, msg_area, contact_info, new_contact_form)))
+    return new_contact_form
+
+def create_new_contact(window, msg_area, contact_info, new_contact_form):
+    username = new_contact_form.get()
+    contact_info.create_contact(username, username)
+    update_contact_area(window, msg_area, contact_info)
+
+def create_new_contact_button(window, msg_area, contact_info, new_contact_form):
+    create_contact_action = partial(create_new_contact, window, msg_area, contact_info, new_contact_form)
+    new_contact_button = Button(window, text="Create New Contact", command=create_contact_action)
+    new_contact_button.grid(column=2, row=4, sticky="ew")
+    return create_contact_action
 
 def create_contact_area(window):
     contact_area = scrolledtext.ScrolledText(window,width=15,height=10)
