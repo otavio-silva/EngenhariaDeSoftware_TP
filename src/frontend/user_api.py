@@ -54,8 +54,9 @@ def receive_message_from_server(message_id, sender_username, message_content):
         contact_info.create_contact(sender_username, sender_username)
         sender_contact = contact_info.get_contact_from_username(sender_username)
         update_contact_area(window, msg_area, contact_info)
-
-    if not msg.text.isspace() and msg:
+    print(message_id)
+    print(sender_contact.search_msg_id(int(message_id)))
+    if not msg.text.isspace() and msg and not sender_contact.search_msg_id(int(message_id)):
         if contact_info.current_contact.username == sender_username:
             display_message(msg_area, msg)
         msg.set_message_id(message_id)

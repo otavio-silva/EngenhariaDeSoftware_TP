@@ -124,7 +124,7 @@ def send_message(msg_area,msg_form, contact_info : ContactInfo, access_token):
         try:
             req = send_message_request(contact_info.current_contact.username, msg.text, access_token)
             print(req.json())
-            message_id = req.json()['created_id'] #Talvez fazer algo com esse id
+            message_id = req.json()['created_id']
         except Exception as e:
             print(e)
             return  
