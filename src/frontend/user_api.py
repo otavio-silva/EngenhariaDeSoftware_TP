@@ -72,8 +72,12 @@ data:
 def update_message_status_from_request(message_id):
     try:
         message_id = int(message_id)
-        received = request.form['received'] #Alterar para ser opcional os campos
-        read = request.form['read']
+        received = None
+        if "received" in request.form:
+            received = request.form['received'] #Alterar para ser opcional os campos
+        read = None
+        if "read" in request.form:
+            read = request.form['read']
         #Escrever no arquivo e só depois enviar a resposta
         
         response = make_response(jsonify({"success": True}), 201)

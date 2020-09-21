@@ -74,9 +74,9 @@ def keep_active_request(port, access_token):
 
 
 
-
 '''
-username = "usr2"
+
+username = "pop"
 password = "psw"
 req = create_user_request(username, password)
 print(req.json())
@@ -94,6 +94,8 @@ req = get_message_info_request(message_id, access_token)
 print(req.json())
 req = update_message_state_request(True, False, message_id, access_token)
 print(req.json())
+req = keep_active_request(5000, access_token)
+print(req)
 #response = requests.get("http://127.0.0.1:5000/api/messages")
 #print(response.content)
 #print(json.loads(response.content))
