@@ -76,7 +76,7 @@ def keep_active_request(port, access_token):
 
 
 '''
-username = "usr"
+username = "usr2"
 password = "psw"
 req = create_user_request(username, password)
 print(req.json())
@@ -87,7 +87,7 @@ req = keep_active_request(5000, access_token)
 print(req)
 req = get_user_info_request(username, access_token)
 print(req.json())
-req = send_message_request("usr2", "Mensagem sendo enviada", access_token)
+req = send_message_request("usr", "Mensagem sendo enviada", access_token)
 print(req.json())
 message_id = req.json()['created_id']
 req = get_message_info_request(message_id, access_token)

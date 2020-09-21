@@ -69,7 +69,8 @@ def message_detail(request, pk):
             message.save()
 
             # Notifica ao usuário que enviou a mensagem que seu estado foi atualizado para "lida"
-            notify_user_read(message.id)
+            port = User.objects.get(username=message.sender).port
+            notify_user_read(message.id, port)
 
             # transforma a instância de mensagem em json
             serialized_message = MessageSerializer(message).data

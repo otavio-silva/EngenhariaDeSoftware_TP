@@ -10,6 +10,19 @@ class MessageOrigin(Enum):
         else: 
             return self.RECEIVED
 
+class MessageStatus(Enum):
+    READ = 1
+    RECEIVED = 2
+    WAITING = 3
+
+    def from_value(self,value):
+        if value == 1 : 
+            return self.READ
+        elif value == 2: 
+            return self.RECEIVED
+        else:
+            return self.WAITING
+
 class Message :
 
     def __init__(self, text, origin : MessageOrigin, msg_id=None):
@@ -17,6 +30,7 @@ class Message :
         self.origin = origin
         self.persisted = False
         self.id = msg_id
+        self.status = MessageStatus.WAITING  
     
     def set_message_id(self, msg_id):
         self.id = int(msg_id)
