@@ -173,7 +173,10 @@ def change_current_conversation(msg_area,contact,contact_info,current_contact_lb
 
 def update_contact_area(window, msg_area, contact_info):
     contact_area = create_contact_area(window)
-    current_contact_lbl = Label(window, text=contact_info.current_contact.name, font=("Arial Bold", 20))
+    if contact_info.current_contact != None:
+        current_contact_lbl = Label(window, text=contact_info.current_contact.name, font=("Arial Bold", 20))
+    else:
+        current_contact_lbl = Label(window, text='', font=("Arial Bold", 20))
     current_contact_lbl.grid(column=1, row=0, sticky="s")
     contact_area.delete("1.0",END)
     for c in contact_info.contacts:
