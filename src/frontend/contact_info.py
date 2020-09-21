@@ -39,15 +39,6 @@ class ContactInfo :
         self.username = username
         self.access_token = access_token
         contact_list = self.get_persisted_contact_list()
-        contact_list += [
-                Contact("joao_pedro23","João Pedro"),
-                Contact("maria_aaaa","Maria"),
-                Contact("melhorPai123","Pai"),
-                Contact("motherOfAll","Mãe"),
-                Contact("juliao_tiozao","Tio Julio"),
-                Contact("my_cello","Marcelo"),
-                Contact("buhbuh54","Bruna")
-        ]
         for contact in contact_list:
             self.fill_persisted_messages(contact)
             self.contacts[contact.username] = contact
