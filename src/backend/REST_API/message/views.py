@@ -15,6 +15,8 @@ from message.serializers import MessageSerializer
 
 from root.views import notify_user_read
 
+import requests
+
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def message_detail(request, pk):
@@ -139,6 +141,19 @@ def create_message(request):
                 )
 
         message.save()
+
+        try:
+            data = {'id':message.id, 'sender':message.sender, 'content':message.content, 'created_at':message.created_at}
+            user = User.objects.get(username=message.receiver)
+            port = user.port
+            response = requests.post("http://localhost:" + str(port) + "/api/messages", data=data)
+            if response.json()['success'] == True:
+                message.received_at = timezone.now()
+                message.save()
+        except Exception as e:
+            print(e)
+            print("Failed to redirect")
+
 
         content = {'created_id': message.id}
         return Response(content, status=status.HTTP_201_CREATED)

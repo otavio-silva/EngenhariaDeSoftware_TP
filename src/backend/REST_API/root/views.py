@@ -38,7 +38,7 @@ def check_messages(request):
             # Dados para requisicao a ser enviada para o front
             data = {'id':message.id, 'sender':message.sender, 'content':message.content, 'created_at':message.created_at}
 
-            # TODO: testar o envio e o recebimento de requisicoes para o front apos a integracao
+            
 
             # Recuperando a instancia de um determinado usuario do BD - exemplo: 'message.sender' eh o ID de um determinado usuario
             user = User.objects.get(username=message.receiver)
