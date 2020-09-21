@@ -53,7 +53,8 @@ def check_messages(request):
             try:
                 # Caso a mensagem seja recebida
                 # Insere a data e hora de recebimento da mensagem na instancia da mensagem
-                if response.success == True:
+
+                if response.json()['success'] == True:
 
                     message.received_at = timezone.now()
                     message.save()
@@ -71,7 +72,7 @@ def notify_user_read(id, port):
     data = {'read': True}
     try:
         response = requests.put(user_adress, data=data)
-        if response.success != True:
+        if response.json()['success'] != True:
             print('error: read notification of message', id, 'has not been received at frontend.')
     except:
         print('error: read notification of message', id, 'has not been sent to frontend.')
@@ -84,7 +85,7 @@ def notify_user_received(id, port):
     data = {'received': True}
     try:
         response = requests.put(user_adress, data=data)
-        if response.success != True:
+        if response.json()['success'] != True:
             print('error: received notification of message', id, 'has not been received at frontend.')
     except:
         print('error: received notification of message', id, 'has not been sent to frontend.')
